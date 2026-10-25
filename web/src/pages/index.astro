@@ -18,7 +18,7 @@ const [featured, categories, settings] = await Promise.all([getFeaturedScooters(
         Vozi pametnije.<br />Pronađi svoj skuter.
       </h1>
       <p class="mt-6 max-w-xl text-lg text-white/80">
-        Gradski, off-road i dečiji modeli u više boja. Izaberite model, pošaljite upit – mi vas zovemo sa svim detaljima.
+        Električni skuteri za svakodnevnu vožnju, u više boja. Izaberite model, pošaljite upit – mi vas zovemo sa svim detaljima.
       </p>
       <div class="mt-10 flex flex-wrap gap-3">
         <a href="/skuteri" class="btn-light">Pogledaj sve skutere <span class="arrow" aria-hidden="true">→</span></a>
@@ -27,7 +27,7 @@ const [featured, categories, settings] = await Promise.all([getFeaturedScooters(
     </div>
   </section>
 
-  {categories.length > 0 && (
+  {categories.length > 1 && (
     <section class="container-page mt-20" aria-labelledby="kategorije">
       <h2 id="kategorije" data-reveal class="text-2xl font-extrabold sm:text-3xl">Kategorije</h2>
       <ul class="mt-6 grid gap-4 sm:grid-cols-3">

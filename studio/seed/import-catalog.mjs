@@ -1,6 +1,6 @@
-// Uvozi brendove i skutere iz web/src/data/sample-scooters.json u Sanity, zajedno sa slikama
+// Uvozi brendove, kategorije i skutere iz web/src/data/sample-scooters.json u Sanity, zajedno sa slikama
 // (polje "photos" u svakoj boji: {url} sa interneta ili {file} iz seed/images/).
-// Postojeći dokumenti sa istim _id se zamenjuju; sa --prune brišu se skuteri i brendovi kojih nema u fajlu.
+// Postojeći dokumenti sa istim _id se zamenjuju; sa --prune brišu se skuteri, brendovi i kategorije kojih nema u fajlu.
 //
 // Pokretanje (iz studio/):
 //   SANITY_STUDIO_DATASET=development npx sanity exec seed/import-catalog.mjs --with-user-token
@@ -35,6 +35,9 @@ const tx = client.transaction()
 
 for (const b of data.brands) {
   tx.createOrReplace({_id: b.id, _type: 'brand', name: b.name, slug: {_type: 'slug', current: b.slug}})
+}
+for (const c of data.categories) {
+  tx.createOrReplace({_id: c.id, _type: 'category', name: c.name, description: c.description, slug: {_type: 'slug', current: c.slug}})
 }
 
 for (const s of data.scooters) {
@@ -72,8 +75,8 @@ for (const s of data.scooters) {
 }
 
 if (prune) {
-  const keep = [...data.scooters.map((s) => s.id), ...data.brands.map((b) => b.id)]
-  const stale = await client.fetch(`*[_type in ["scooter", "brand"] && !(_id in path("drafts.**")) && !(_id in $keep)]{_id, _type, name}`, {keep})
+  const keep = [...data.scooters, ...data.brands, ...data.categories].map((d) => d.id)
+  const stale = await client.fetch(`*[_type in ["scooter", "brand", "category"] && !(_id in path("drafts.**")) && !(_id in $keep)]{_id, _type, name}`, {keep})
   for (const doc of stale) {
     tx.delete(doc._id).delete(`drafts.${doc._id}`)
     console.log(`  briše se ${doc._type}: ${doc.name}`)

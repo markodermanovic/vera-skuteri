@@ -8,22 +8,10 @@
   ],
   "categories": [
     {
-      "id": "cat-gradski",
-      "name": "Gradski",
-      "slug": "gradski",
-      "description": "Lagani skuteri za svakodnevnu vožnju kroz grad."
-    },
-    {
-      "id": "cat-offroad",
-      "name": "Off-road",
-      "slug": "off-road",
-      "description": "Snažni skuteri za neravne terene."
-    },
-    {
-      "id": "cat-deciji",
-      "name": "Dečiji",
-      "slug": "deciji",
-      "description": "Bezbedni skuteri za najmlađe."
+      "id": "cat-elektricni-skuteri",
+      "name": "Električni skuteri",
+      "slug": "elektricni-skuteri",
+      "description": "Električni skuteri sa sedištem za svakodnevnu gradsku vožnju."
     }
   ],
   "settings": {
@@ -45,7 +33,7 @@
       "name": "HULK",
       "slug": "hulk",
       "brand": "brand-xtreme-motors",
-      "category": "cat-gradski",
+      "category": "cat-elektricni-skuteri",
       "excerpt": "Novi model: najjača baterija u ponudi (72V 20Ah) i domet do 80 km na jedno punjenje.",
       "description": "HULK je novi model u našoj ponudi i najjači skuter iz Xtreme Motors kolekcije. Baterija od 72V 20Ah daje domet od 40 do 80 km, zavisno od načina vožnje i opterećenja.\n\nMotor od 240W, nosivost do 150 kg i gume od 16\" čine ga udobnim i stabilnim za svakodnevnu gradsku vožnju.",
       "price": 119999,
@@ -89,7 +77,7 @@
       "name": "VESPI",
       "slug": "vespi",
       "brand": "brand-xtreme-motors",
-      "category": "cat-gradski",
+      "category": "cat-elektricni-skuteri",
       "excerpt": "Retro dizajn u bojama italijanske trobojke, baterija 72V 27Ah i domet do 80 km.",
       "description": "VESPI spaja klasičan retro izgled sa modernom tehnikom. Baterija od 72V 27Ah daje domet od 40 do 80 km, a motor od 240W i nosivost do 150 kg čine ga pouzdanim za svakodnevnu vožnju.\n\nGume od 16\" i zadnji kofer daju udobnost i mesto za stvari.",
       "price": 129999,
@@ -133,7 +121,7 @@
       "name": "RX-3",
       "slug": "rx-3",
       "brand": "brand-xtreme-motors",
-      "category": "cat-gradski",
+      "category": "cat-elektricni-skuteri",
       "excerpt": "Sportski izgled, LED svetla i najjača baterija 72V 27Ah za domet do 80 km.",
       "description": "RX-3 je sportski gradski skuter agresivnog dizajna sa LED prednjim svetlima. Baterija od 72V 27Ah daje domet od 40 do 80 km, a nosivost je do 150 kg.\n\nMotor od 240W, gume od 16\" i zadnji kofer čine ga praktičnim za svakodnevne obaveze.",
       "priceOnRequest": true,
@@ -176,7 +164,7 @@
       "name": "WIND",
       "slug": "wind",
       "brand": "brand-xtreme-motors",
-      "category": "cat-gradski",
+      "category": "cat-elektricni-skuteri",
       "excerpt": "Snažna 60V 20Ah baterija, domet do 60 km i prostrani gepek – u beloj, srebrnoj i crvenoj boji.",
       "description": "WIND je pouzdan gradski skuter sa baterijom od 60V 20Ah i dometom od 40 do 60 km. Motor od 240W i nosivost do 150 kg čine ga dobrim izborom za svakodnevni posao i gradske obaveze.\n\nGume od 16\" i zadnji kofer za stvari daju udobnost i praktičnost na svakoj vožnji.",
       "price": 99999,
@@ -267,7 +255,7 @@
       "name": "HAWK",
       "slug": "hawk",
       "brand": "brand-xtreme-motors",
-      "category": "cat-gradski",
+      "category": "cat-elektricni-skuteri",
       "excerpt": "Izmenjiva baterija 48V 12Ah, prednja disk kočnica i LED svetla – u četiri boje.",
       "description": "HAWK je moderan gradski skuter sa izmenjivom baterijom od 48V 12Ah – bateriju možete izvaditi i puniti kod kuće ili na poslu. Domet je do 50 km, a nosivost do 150 kg.\n\nPrednja disk kočnica, LED prednje oboreno i dugo svetlo i LED prednji žmigavci daju sigurnost i noću i danju.",
       "price": 89999,
@@ -353,7 +341,7 @@
       "name": "DUST",
       "slug": "dust",
       "brand": "brand-xtreme-motors",
-      "category": "cat-gradski",
+      "category": "cat-elektricni-skuteri",
       "excerpt": "Pristupačan gradski skuter sa korpom, zadnjim sedištem i pedalama – idealan za kupovinu i kratke vožnje.",
       "description": "DUST je pristupačan i praktičan gradski skuter. Akumulatori 4×12V daju domet do 40 km, a nosivost je do 150 kg.\n\nU opremu spadaju zadnje sedište, prednja korpa, zadnji amortizeri, pedale, daljinski sa alarmom, svetlo, zadnji migavci i retrovizori.",
       "price": 59999,

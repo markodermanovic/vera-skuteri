@@ -11,7 +11,7 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title, namespace, description = 'Električni skuteri – gradski, off-road i dečiji modeli. Pošaljite upit i javljamo vam se u najkraćem roku.', ogImage, noindex } = Astro.props;
+const { title, namespace, description = 'Xtreme Motors električni skuteri – modeli, cene i specifikacije. Pošaljite upit i javljamo vam se u najkraćem roku.', ogImage, noindex } = Astro.props;
 const settings = await getSettings();
 const fullTitle = title === settings.companyName ? title : `${title} | ${settings.companyName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
