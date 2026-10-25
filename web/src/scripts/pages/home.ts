@@ -5,7 +5,7 @@ const INK = '#18181b';
 
 /**
  * Hero skuter (components/HeroScooter.astro), po uzoru na dizajnersku skicu → render:
- * konstrukcione linije → konture → "četkica" rendera → vožnja (točkovi, put, far, energija).
+ * konstrukcione linije → konture → "četkica" rendera → vožnja (točkovi, put, far).
  * SVG je u markupu već gotov render; ovde se vraća na početak i animira. Petlja staje van ekrana.
  */
 export const initHome: PageInit = ({ container }) => {
@@ -32,10 +32,10 @@ export const initHome: PageInit = ({ container }) => {
   const ctx = gsap.context((self) => {
     const sketch = q('[data-hs-sketch] path');
     const lineGroups = q<SVGGElement>('[data-hs-lines]');
-    const contours = q('[data-hs-lines] path, [data-hs-lines] circle, [data-hs-lines] rect').filter(plain);
+    const spokes = q('[data-hs-spokes]');
+    // Žbice su u skaliranoj grupi (elipsa) – one se samo pojave, sve ostalo se iscrtava
+    const contours = q('[data-hs-lines] path, [data-hs-lines] ellipse').filter((el) => plain(el) && !el.closest('[data-hs-spokes]'));
     const tires = q('[data-hs-tire]');
-    const energy = q('[data-hs-energy]')[0];
-    const energyLen = energy.getTotalLength();
 
     // Početno stanje: prazno platno, bele linije
     prepDraw(sketch.filter(plain));
@@ -44,8 +44,8 @@ export const initHome: PageInit = ({ container }) => {
     gsap.set(sketch.filter((el) => !plain(el)), { opacity: 0 });
     gsap.set(lineGroups, { color: '#fff' });
     gsap.set(q('[data-hs-reveal]'), { attr: { width: 0 } });
-    gsap.set(q('[data-hs-shadow], [data-hs-beam], [data-hs-glow], [data-hs-road], [data-hs-wheel] circle[stroke-dasharray]'), { opacity: 0 });
-    gsap.set(energy, { strokeDasharray: `18 ${energyLen}`, strokeDashoffset: 18 });
+    gsap.set(q('[data-hs-shadow], [data-hs-beam], [data-hs-glow], [data-hs-road]'), { opacity: 0 });
+    gsap.set(spokes, { opacity: 0 });
 
     const intro = gsap
       .timeline({ delay: 0.2, defaults: { ease: 'power2.inOut' } })
@@ -55,7 +55,8 @@ export const initHome: PageInit = ({ container }) => {
       // 2. Konture
       .to(tires, { strokeDashoffset: 0, duration: 1, stagger: 0.12 }, '-=0.3')
       .to(contours.filter((el) => !tires.includes(el)), { strokeDashoffset: 0, duration: 0.8, stagger: 0.025 }, '<0.15')
-      .to(q('[data-hs-road], [data-hs-wheel] circle[stroke-dasharray]'), { opacity: 1, duration: 0.5 }, '<0.3')
+      .to(spokes, { opacity: 1, duration: 0.6 }, '<0.4')
+      .to(q('[data-hs-road]'), { opacity: 1, duration: 0.5 }, '<')
       // 3. Render: četkica sleva nadesno, linije prelaze u tamne, skica nestaje
       .to(q('[data-hs-reveal]'), { attr: { width: 640 }, duration: 1.1, ease: 'power3.inOut' }, '-=0.2')
       .to(lineGroups, { color: INK, duration: 0.8, ease: 'power1.inOut' }, '<0.25')
@@ -68,21 +69,13 @@ export const initHome: PageInit = ({ container }) => {
 
     // 4. Vožnja
     const loop = gsap.timeline({ paused: true });
-    q<SVGGElement>('[data-hs-wheel]').forEach((wheel) => {
-      const tire = wheel.querySelector<SVGCircleElement>('[data-hs-tire]')!;
-      loop.to(
-        wheel.querySelector('[data-hs-spokes]'),
-        { rotation: 360, svgOrigin: `${tire.getAttribute('cx')} ${tire.getAttribute('cy')}`, duration: 0.9, ease: 'none', repeat: -1 },
-        0,
-      );
-    });
+    // Okretanje oko lokalnog centra grupe koja je već skalirana u elipsu točka
+    spokes.forEach((el) => loop.to(el, { attr: { transform: 'rotate(360)' }, duration: 0.9, ease: 'none', repeat: -1 }, 0));
     loop
       .to(q('[data-hs-road]'), { strokeDashoffset: 56, duration: 0.45, ease: 'none', repeat: -1 }, 0)
       .to(q('[data-hs-speed]'), { opacity: 1, duration: 0.6 }, 0)
       .to(q('[data-hs-body]'), { y: -2.5, duration: 0.42, ease: 'sine.inOut', yoyo: true, repeat: -1 }, 0)
-      .to(q('[data-hs-beam]'), { opacity: 0.75, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1 }, 0)
-      .to(energy, { strokeOpacity: 1, duration: 0.2 }, 0)
-      .to(energy, { strokeDashoffset: -energyLen, duration: 1.1, ease: 'power1.in', repeat: -1, repeatDelay: 0.7 }, 0);
+      .to(q('[data-hs-beam]'), { opacity: 0.75, duration: 1.6, ease: 'sine.inOut', yoyo: true, repeat: -1 }, 0);
     q('[data-hs-speed] path').forEach((line, i) => {
       loop.fromTo(line, { x: 20 }, { x: -110, duration: 0.55 + i * 0.1, ease: 'none', repeat: -1, delay: i * 0.15 }, 0);
     });
