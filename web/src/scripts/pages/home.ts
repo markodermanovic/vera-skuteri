@@ -37,9 +37,14 @@ export const initHome: PageInit = ({ container }) => {
     } else video.pause();
   };
 
+  // Skok na početak petlje samo jednom po prolazu – ponovljeni skok dok traje prethodni ga nikad ne završi
   const onTime = () => {
-    if (video.currentTime >= LOOP_END || video.currentTime < LOOP_START) video.currentTime = LOOP_START;
-    progress.style.transform = `scaleX(${(video.currentTime - LOOP_START) / (LOOP_END - LOOP_START)})`;
+    if (video.seeking) return;
+    if (video.currentTime >= LOOP_END) video.currentTime = LOOP_START;
+    progress.style.transform = `scaleX(${Math.max(0, video.currentTime - LOOP_START) / (LOOP_END - LOOP_START)})`;
+  };
+  const onMeta = () => {
+    if (video.currentTime < LOOP_START) video.currentTime = LOOP_START; // preskoči crni uvodni kadar
   };
   const onEnded = () => {
     video.currentTime = LOOP_START;
@@ -50,6 +55,7 @@ export const initHome: PageInit = ({ container }) => {
     sync();
   };
 
+  video.addEventListener('loadedmetadata', onMeta);
   video.addEventListener('timeupdate', onTime);
   video.addEventListener('ended', onEnded);
   video.addEventListener('play', render);
@@ -68,6 +74,7 @@ export const initHome: PageInit = ({ container }) => {
   return () => {
     observer.disconnect();
     video.pause();
+    video.removeEventListener('loadedmetadata', onMeta);
     video.removeEventListener('timeupdate', onTime);
     video.removeEventListener('ended', onEnded);
     video.removeEventListener('play', render);
