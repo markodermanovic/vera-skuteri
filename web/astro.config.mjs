@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://xtreme-motors.ackoskuteri.workers.dev',
+  site: 'https://xtreme-motors.xtrememotors.workers.dev',
   trailingSlash: 'never',
   // Slike optimizuje Sanity CDN, a sesije nisu potrebne – bez dodatnih Cloudflare binding-a
   adapter: cloudflare({ imageService: 'passthrough' }),
