@@ -5,7 +5,7 @@ const INK = '#18181b';
 
 /**
  * Hero skuter (components/HeroScooter.astro), po uzoru na dizajnersku skicu → render:
- * konstrukcione linije → konture → "četkica" rendera → oznake → vožnja (točkovi, put, far, energija).
+ * konstrukcione linije → konture → "četkica" rendera → vožnja (točkovi, put, far, energija).
  * SVG je u markupu već gotov render; ovde se vraća na početak i animira. Petlja staje van ekrana.
  */
 export const initHome: PageInit = ({ container }) => {
@@ -34,22 +34,17 @@ export const initHome: PageInit = ({ container }) => {
     const lineGroups = q<SVGGElement>('[data-hs-lines]');
     const contours = q('[data-hs-lines] path, [data-hs-lines] circle, [data-hs-lines] rect').filter(plain);
     const tires = q('[data-hs-tire]');
-    const leaders = q('[data-hs-leader]');
-    const callouts = q<SVGGElement>('[data-hs-callout]');
     const energy = q('[data-hs-energy]')[0];
     const energyLen = energy.getTotalLength();
 
     // Početno stanje: prazno platno, bele linije
     prepDraw(sketch.filter(plain));
     prepDraw(contours);
-    prepDraw(leaders);
     gsap.set(q('[data-hs-sketch]'), { opacity: 1 });
     gsap.set(sketch.filter((el) => !plain(el)), { opacity: 0 });
     gsap.set(lineGroups, { color: '#fff' });
     gsap.set(q('[data-hs-reveal]'), { attr: { width: 0 } });
     gsap.set(q('[data-hs-shadow], [data-hs-beam], [data-hs-glow], [data-hs-road], [data-hs-wheel] circle[stroke-dasharray]'), { opacity: 0 });
-    gsap.set(callouts, { opacity: 1 });
-    gsap.set(q('[data-hs-callout] circle, [data-hs-callout] text'), { opacity: 0 });
     gsap.set(energy, { strokeDasharray: `18 ${energyLen}`, strokeDashoffset: 18 });
 
     const intro = gsap
@@ -69,13 +64,9 @@ export const initHome: PageInit = ({ container }) => {
       // Far: treptaj pri paljenju, pa snop
       .to(q('[data-hs-glow]'), { keyframes: { opacity: [0, 1, 0.3, 1] }, duration: 0.45, ease: 'none' }, '-=0.3')
       .to(q('[data-hs-beam]'), { opacity: 1, duration: 0.6, ease: 'power2.out' }, '<0.25')
-      // 4. Oznake
-      .to(q('[data-hs-callout] circle'), { opacity: 1, duration: 0.25, stagger: 0.12 }, '<')
-      .to(leaders, { strokeDashoffset: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out' }, '<0.05')
-      .to(q('[data-hs-callout] text'), { opacity: 1, duration: 0.35, stagger: 0.12 }, '<0.3')
       .add(() => loop.play());
 
-    // 5. Vožnja
+    // 4. Vožnja
     const loop = gsap.timeline({ paused: true });
     q<SVGGElement>('[data-hs-wheel]').forEach((wheel) => {
       const tire = wheel.querySelector<SVGCircleElement>('[data-hs-tire]')!;
