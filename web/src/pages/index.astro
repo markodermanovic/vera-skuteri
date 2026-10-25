@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScooterCard from '../components/ScooterCard.astro';
-import HeroScooter from '../components/HeroScooter.astro';
 import ShowcaseScooter from '../components/ShowcaseScooter.astro';
 import { getCategories, getFeaturedScooters, getSettings } from '../lib/content';
 
@@ -10,24 +9,50 @@ const [featured, categories, settings] = await Promise.all([getFeaturedScooters(
 
 <Layout title={settings.companyName} namespace="home">
   <section class="container-page pt-8 sm:pt-12">
-    <div class="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-brand to-brand-dark px-6 py-16 text-white sm:px-14 sm:py-20 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-center lg:gap-8 lg:pr-8">
-      <div class="pointer-events-none absolute -right-32 -top-32 -z-10 size-[28rem] rounded-full bg-white/15 blur-3xl" aria-hidden="true"></div>
+    <div data-hero class="relative isolate flex min-h-[34rem] items-end overflow-hidden rounded-[2rem] bg-brand-dark px-6 pb-14 pt-24 text-white sm:min-h-[38rem] sm:px-14 sm:pb-16 lg:min-h-[42rem] lg:items-center lg:pb-24">
+      <!-- Pozadinski video (bez zvuka); pages/home.ts ga pušta, bez JS-a ili uz reduced-motion ostaje poster -->
+      <video
+        data-hero-video
+        class="absolute inset-0 -z-20 size-full scale-[1.02] object-cover"
+        poster="/hero/xtreme-motors-poster.jpg"
+        muted
+        playsinline
+        preload="none"
+        aria-hidden="true"
+      >
+        <source src="/hero/xtreme-motors.mp4" type="video/mp4" />
+      </video>
+      <div class="absolute inset-0 -z-10 bg-gradient-to-r from-brand-dark/95 via-brand/70 to-brand/10" aria-hidden="true"></div>
+      <div class="absolute inset-0 -z-10 bg-gradient-to-t from-black/50 via-transparent to-black/10" aria-hidden="true"></div>
 
-      <div>
-        <p class="text-sm font-semibold uppercase tracking-[0.25em] text-white/70">Električni skuteri</p>
-        <h1 class="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+      <div class="max-w-2xl">
+        <p class="text-sm font-semibold uppercase tracking-[0.25em] text-white/75">Električni skuteri</p>
+        <h1 class="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
           Vozi pametnije.<br />Pronađi svoj skuter.
         </h1>
-        <p class="mt-6 max-w-xl text-lg text-white/80">
+        <p class="mt-6 max-w-xl text-lg text-white/85">
           Električni skuteri za svakodnevnu vožnju, u više boja. Izaberite model, pošaljite upit – mi vas zovemo sa svim detaljima.
         </p>
         <div class="mt-10 flex flex-wrap gap-3">
           <a href="/skuteri" class="btn-light">Pogledaj sve skutere <span class="arrow" aria-hidden="true">→</span></a>
-          <a href="/kontakt" class="btn border border-white/30 hover:border-white hover:bg-white/10">Pošalji upit</a>
+          <a href="/kontakt" class="btn border border-white/40 backdrop-blur-sm hover:border-white hover:bg-white/10">Pošalji upit</a>
         </div>
       </div>
 
-      <HeroScooter class="pointer-events-none -mx-2 -mb-8 mt-10 w-[calc(100%+1rem)] text-white sm:mx-auto sm:max-w-xl lg:m-0 lg:w-full lg:max-w-none" />
+      <!-- Kontrola videa i tanka traka napretka -->
+      <button
+        type="button"
+        data-hero-toggle
+        hidden
+        class="absolute bottom-5 right-5 grid size-11 place-items-center rounded-full border border-white/40 bg-black/20 backdrop-blur-sm transition hover:bg-white/15 sm:bottom-6 sm:right-6"
+        aria-label="Pauziraj video"
+      >
+        <svg data-icon="pause" viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /></svg>
+        <svg data-icon="play" viewBox="0 0 24 24" class="hidden size-4" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+      </button>
+      <div class="absolute inset-x-0 bottom-0 h-[3px] bg-white/10" aria-hidden="true">
+        <div data-hero-progress class="h-full w-full origin-left scale-x-0 bg-white/70"></div>
+      </div>
     </div>
   </section>
 

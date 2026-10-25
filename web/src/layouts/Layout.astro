@@ -24,10 +24,13 @@ const isActive = (href: string) => (href === '/' ? Astro.url.pathname === '/' : 
 ---
 
 <!doctype html>
-<html lang="sr-Latn">
+<!-- Sajt je samo na srpskom; Chrome latinicu često prepozna kao slovenački i nudi prevod – isključeno -->
+<html lang="sr-Latn" translate="no">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google" content="notranslate" />
+    <meta http-equiv="content-language" content="sr-Latn" />
     <meta name="theme-color" content="#a60000" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{fullTitle}</title>

@@ -28,6 +28,9 @@ const specs = [...specRows(scooter.mainSpecs), ...scooter.extraSpecs];
 const inquiryHref = (variant?: string) =>
   `/kontakt?${new URLSearchParams({ model: scooter.slug, ...(variant ? { boja: variant } : {}) })}`;
 const firstImage = variants.find((v) => v.images[0])?.images[0];
+// Sve slike svih boja redom – za lightbox; offset[vi] je indeks prve slike te boje
+const gallery = variants.flatMap((v) => v.images.map((img) => ({ img, color: v.name })));
+const offset = variants.map((_, vi) => variants.slice(0, vi).reduce((n, v) => n + v.images.length, 0));
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -74,17 +77,27 @@ const jsonLd = {
           <div class="variant-panel" data-variant={v.name} hidden={vi !== 0}>
             <div class="aspect-[4/3] overflow-hidden rounded-[2rem] bg-[#ececec]">
               {v.images.length ? (
-                <img
-                  class="main-image size-full object-cover"
-                  src={v.images[0].src}
-                  srcset={v.images[0].srcset}
-                  sizes="(min-width: 1024px) 55vw, 100vw"
-                  alt={v.images[0].alt}
-                  width={v.images[0].width}
-                  height={v.images[0].height}
-                  loading={vi === 0 ? 'eager' : 'lazy'}
-                  fetchpriority={vi === 0 ? 'high' : undefined}
-                />
+                <button
+                  type="button"
+                  class="open-lightbox group/zoom relative block size-full cursor-zoom-in"
+                  data-lb-index={offset[vi]}
+                  aria-label={`Otvori galeriju – ${scooter.name}, ${v.name}`}
+                >
+                  <img
+                    class="main-image size-full object-cover transition-transform duration-700 ease-out-expo group-hover/zoom:scale-[1.03]"
+                    src={v.images[0].src}
+                    srcset={v.images[0].srcset}
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    alt={v.images[0].alt}
+                    width={v.images[0].width}
+                    height={v.images[0].height}
+                    loading={vi === 0 ? 'eager' : 'lazy'}
+                    fetchpriority={vi === 0 ? 'high' : undefined}
+                  />
+                  <span class="absolute bottom-4 right-4 grid size-11 place-items-center rounded-full bg-white/90 text-ink shadow-lg transition-transform duration-300 group-hover/zoom:scale-110" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
+                  </span>
+                </button>
               ) : (
                 <ScooterArt color={v.hex} label={`${scooter.name} – ${v.name}`} class="size-full" />
               )}
@@ -101,6 +114,7 @@ const jsonLd = {
                       data-src={img.src}
                       data-srcset={img.srcset}
                       data-alt={img.alt}
+                      data-lb-index={offset[vi] + ii}
                     >
                       <img src={img.src} srcset={img.srcset} sizes="120px" alt="" loading="lazy" class="size-full object-cover" />
                     </button>
@@ -177,4 +191,48 @@ const jsonLd = {
       </section>
     )}
   </div>
+
+  <!-- Lightbox: sve slike u punoj veličini, prevlačenje / strelice / tastatura (pages/scooter.ts) -->
+  {gallery.length > 0 && (
+    <dialog id="lightbox" class="lightbox fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none bg-black/95 p-0 text-white backdrop:bg-black/80" aria-label={`Galerija – ${scooter.name}`}>
+      <div class="flex size-full flex-col">
+        <div class="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <p class="text-sm text-white/80"><span data-lb-count>1</span> / {gallery.length} · <span data-lb-color>{gallery[0].color}</span></p>
+          <button type="button" data-lb-close class="grid size-11 place-items-center rounded-full bg-white/10 transition hover:bg-white/20" aria-label="Zatvori galeriju">
+            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          </button>
+        </div>
+        <div class="relative min-h-0 flex-1">
+          <ul data-lb-track class="flex size-full snap-x snap-mandatory overflow-x-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {gallery.map(({ img, color }, i) => (
+              <li class="flex h-full w-full shrink-0 snap-center items-center justify-center px-4 sm:px-20" data-color={color}>
+                <img src={img.src} srcset={img.srcset} sizes="100vw" alt={img.alt} width={img.width} height={img.height} loading="lazy" decoding="async" class="max-h-[calc(100dvh-10.5rem)] w-auto max-w-full rounded-xl object-contain sm:max-h-[calc(100dvh-11.5rem)]" />
+              </li>
+            ))}
+          </ul>
+          {gallery.length > 1 && (
+            <>
+              <button type="button" data-lb-prev class="absolute left-3 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 backdrop-blur transition hover:bg-white/25 max-sm:hidden" aria-label="Prethodna slika">
+                <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+              </button>
+              <button type="button" data-lb-next class="absolute right-3 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 backdrop-blur transition hover:bg-white/25 max-sm:hidden" aria-label="Sledeća slika">
+                <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </>
+          )}
+        </div>
+        {gallery.length > 1 && (
+          <ul class="flex justify-center gap-2 overflow-x-auto px-4 py-4" aria-label="Slike">
+            {gallery.map(({ img }, i) => (
+              <li>
+                <button type="button" data-lb-go={i} class="block size-14 overflow-hidden rounded-lg opacity-50 ring-2 ring-transparent transition hover:opacity-90 aria-[current=true]:opacity-100 aria-[current=true]:ring-white sm:size-16" aria-label={`Slika ${i + 1}`}>
+                  <img src={img.src} srcset={img.srcset} sizes="64px" alt="" loading="lazy" class="size-full object-cover" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </dialog>
+  )}
 </Layout>

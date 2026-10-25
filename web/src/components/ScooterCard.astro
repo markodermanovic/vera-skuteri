@@ -9,6 +9,9 @@ interface Props {
 const { scooter } = Astro.props;
 const first = scooter.colorVariants[0];
 const image = first?.images[0];
+// Po jedna slika za svaku boju – na hover se kartica "prevlači" kroz njih (modules/cardSlides.ts)
+const slides = scooter.colorVariants.map((v) => v.images[0]).filter((img) => img !== undefined);
+const slideOf = scooter.colorVariants.map((v) => (v.images[0] ? slides.indexOf(v.images[0]) : -1));
 const { range, topSpeed, motorPower } = scooter.mainSpecs;
 ---
 
@@ -21,8 +24,16 @@ const { range, topSpeed, motorPower } = scooter.mainSpecs;
   data-range={range ?? 0}
   data-name={scooter.name}
 >
-  <div class="relative aspect-[4/3] overflow-hidden bg-[#ececec]">
-    {image ? (
+  <div class="relative aspect-[4/3] overflow-hidden bg-[#ececec]" data-card-slides={slides.length > 1 ? '' : undefined}>
+    {slides.length > 1 ? (
+      <div class="size-full transition-transform duration-700 ease-out-expo group-hover:scale-105">
+        <div data-card-track class="flex size-full transition-transform duration-700 ease-out-expo motion-reduce:transition-none">
+          {slides.map((img, i) => (
+            <img src={img.src} srcset={img.srcset} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" alt={i === 0 ? img.alt : ''} width={img.width} height={img.height} loading="lazy" decoding="async" class="size-full shrink-0 object-cover" />
+          ))}
+        </div>
+      </div>
+    ) : image ? (
       <img src={image.src} srcset={image.srcset} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" class="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" />
     ) : (
       first && <ScooterArt color={first.hex} label={`${scooter.name} – ${first.name}`} class="size-full transition-transform duration-700 ease-out-expo group-hover:scale-105" />
@@ -47,7 +58,8 @@ const { range, topSpeed, motorPower } = scooter.mainSpecs;
       <ul class="flex -space-x-1" aria-label={`Dostupne boje: ${scooter.colorVariants.map((v) => v.name).join(', ')}`}>
         {scooter.colorVariants.map((v, i) => (
           <li
-            class="size-5 rounded-full shadow-[inset_0_0_0_1px_rgb(0_0_0/0.15)] ring-2 ring-white transition-transform duration-300 group-hover:translate-x-[calc(var(--i)*3px)]"
+            data-card-dot={slideOf[i]}
+            class="size-5 rounded-full shadow-[inset_0_0_0_1px_rgb(0_0_0/0.15)] ring-2 ring-white transition-transform duration-300 group-hover:translate-x-[calc(var(--i)*3px)] [&.is-active]:z-10 [&.is-active]:scale-125 [&.is-active]:ring-brand"
             style={`background:${v.hex};--i:${i}`}
             title={v.name}
           />

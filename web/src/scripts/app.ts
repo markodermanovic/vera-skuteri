@@ -3,6 +3,7 @@ import type { ITransitionData } from '@barba/core/dist/src/defs';
 import { gsap, EASE, DURATION, prefersReducedMotion, type Cleanup } from './lib/motion';
 import { syncHead } from './lib/head';
 import { initReveal } from './modules/reveal';
+import { initCardSlides } from './modules/cardSlides';
 import { initNav, updateNav } from './modules/header';
 import { pages } from './pages';
 
@@ -13,7 +14,7 @@ const urlOf = (page: ITransitionData['next']) => new URL(page.url.href ?? locati
 
 function mount(container: HTMLElement, namespace: string, url: URL) {
   const page = pages[namespace]?.({ container, url });
-  cleanups = [initReveal(container), ...(page ? [page] : [])];
+  cleanups = [initReveal(container), initCardSlides(container), ...(page ? [page] : [])];
 }
 
 function unmount() {
