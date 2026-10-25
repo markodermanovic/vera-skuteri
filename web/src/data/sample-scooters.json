@@ -265,7 +265,7 @@
       "description": "HAWK je moderan gradski skuter sa izmenjivom baterijom od 48V 12Ah – bateriju možete izvaditi i puniti kod kuće ili na poslu. Domet je do 50 km, a nosivost do 150 kg.\n\nPrednja disk kočnica, LED prednje oboreno i dugo svetlo i LED prednji žmigavci daju sigurnost i noću i danju.",
       "price": 89999,
       "priceOnRequest": false,
-      "featured": false,
+      "featured": true,
       "order": 5,
       "mainSpecs": {
         "batteryVoltage": 48,
@@ -351,7 +351,7 @@
       "description": "DUST je pristupačan i praktičan gradski skuter. Akumulatori 4×12V daju domet do 40 km, a nosivost je do 150 kg.\n\nU opremu spadaju zadnje sedište, prednja korpa, zadnji amortizeri, pedale, daljinski sa alarmom, svetlo, zadnji migavci i retrovizori.",
       "price": 59999,
       "priceOnRequest": false,
-      "featured": false,
+      "featured": true,
       "order": 6,
       "mainSpecs": {
         "motorPower": 240,

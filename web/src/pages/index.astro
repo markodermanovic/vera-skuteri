@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ScooterCard from '../components/ScooterCard.astro';
 import HeroScooter from '../components/HeroScooter.astro';
+import ShowcaseScooter from '../components/ShowcaseScooter.astro';
 import { getCategories, getFeaturedScooters, getSettings } from '../lib/content';
 
 const [featured, categories, settings] = await Promise.all([getFeaturedScooters(), getCategories(), getSettings()]);
@@ -27,6 +28,12 @@ const [featured, categories, settings] = await Promise.all([getFeaturedScooters(
       </div>
 
       <HeroScooter class="pointer-events-none -mx-2 -mb-8 mt-10 w-[calc(100%+1rem)] text-white sm:mx-auto sm:max-w-xl lg:m-0 lg:w-full lg:max-w-none" />
+    </div>
+  </section>
+
+  <section class="container-page mt-12 sm:mt-16">
+    <div class="rounded-[2rem] border border-line bg-white px-6 py-10 sm:px-14 sm:py-14">
+      <ShowcaseScooter />
     </div>
   </section>
 

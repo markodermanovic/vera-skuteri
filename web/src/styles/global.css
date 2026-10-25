@@ -51,6 +51,13 @@
   [data-hero-scooter]:not(.is-ready) { visibility: hidden; }
 }
 
+/* Skica → fotografija (pages/showcase.ts pomera --reveal 0% → 125%; podrazumevano je slika cela) */
+.showcase-photo {
+  --reveal: 125%;
+  -webkit-mask-image: linear-gradient(100deg, #000 calc(var(--reveal) - 25%), transparent var(--reveal));
+  mask-image: linear-gradient(100deg, #000 calc(var(--reveal) - 25%), transparent var(--reveal));
+}
+
 /* Dok Flip animira katalog, CSS tranzicije kartica ne smeju da se mešaju */
 .is-flipping .scooter-card { transition: none !important; }
 
