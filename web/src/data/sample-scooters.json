@@ -1,12 +1,30 @@
 {
   "brands": [
-    {"id": "brand-voltra", "name": "Voltra", "slug": "voltra"},
-    {"id": "brand-urbo", "name": "Urbo", "slug": "urbo"}
+    {
+      "id": "brand-xtreme-motors",
+      "name": "Xtreme Motors",
+      "slug": "xtreme-motors"
+    }
   ],
   "categories": [
-    {"id": "cat-gradski", "name": "Gradski", "slug": "gradski", "description": "Lagani skuteri za svakodnevnu vožnju kroz grad."},
-    {"id": "cat-offroad", "name": "Off-road", "slug": "off-road", "description": "Snažni skuteri za neravne terene."},
-    {"id": "cat-deciji", "name": "Dečiji", "slug": "deciji", "description": "Bezbedni skuteri za najmlađe."}
+    {
+      "id": "cat-gradski",
+      "name": "Gradski",
+      "slug": "gradski",
+      "description": "Lagani skuteri za svakodnevnu vožnju kroz grad."
+    },
+    {
+      "id": "cat-offroad",
+      "name": "Off-road",
+      "slug": "off-road",
+      "description": "Snažni skuteri za neravne terene."
+    },
+    {
+      "id": "cat-deciji",
+      "name": "Dečiji",
+      "slug": "deciji",
+      "description": "Bezbedni skuteri za najmlađe."
+    }
   ],
   "settings": {
     "companyName": "Xtreme Motors",
@@ -14,86 +32,384 @@
     "email": "infoxtrememotori@gmail.com",
     "address": "Bulevar oslobođenja 1\n21000 Novi Sad",
     "workingHours": "Pon–Pet 09–18h, Sub 09–14h",
-    "social": [{"label": "Instagram", "url": "https://instagram.com/"}]
+    "social": [
+      {
+        "label": "Instagram",
+        "url": "https://instagram.com/"
+      }
+    ]
   },
   "scooters": [
     {
-      "id": "scooter-voltra-city-x",
-      "name": "Voltra City X",
-      "slug": "voltra-city-x",
-      "brand": "brand-voltra",
+      "id": "scooter-hulk",
+      "name": "HULK",
+      "slug": "hulk",
+      "brand": "brand-xtreme-motors",
       "category": "cat-gradski",
-      "excerpt": "Lagan i sklopiv gradski skuter sa dometom do 35 km – idealan za posao i fakultet.",
-      "description": "Voltra City X je napravljen za svakodnevnu gradsku vožnju. Sklapa se u tri sekunde, staje u gepek i lako se nosi u javni prevoz.\n\nAluminijumski ram i vazdušne gume od 10\" daju udobnu vožnju i po lošijem asfaltu.",
-      "price": 54990,
+      "excerpt": "Novi model: najjača baterija u ponudi (72V 20Ah) i domet do 80 km na jedno punjenje.",
+      "description": "HULK je novi model u našoj ponudi i najjači skuter iz Xtreme Motors kolekcije. Baterija od 72V 20Ah daje domet od 40 do 80 km, zavisno od načina vožnje i opterećenja.\n\nMotor od 240W, nosivost do 150 kg i gume od 16\" čine ga udobnim i stabilnim za svakodnevnu gradsku vožnju.",
+      "price": 119999,
       "priceOnRequest": false,
       "featured": true,
       "order": 1,
-      "mainSpecs": {"motorPower": 350, "batteryVoltage": 36, "batteryCapacity": 10, "range": 35, "topSpeed": 25, "weight": 14.5, "maxLoad": 120, "chargeTime": 5, "tireSize": "10\" vazdušne", "brakes": "Disk nazad + E-ABS", "ipRating": "IPX4"},
-      "extraSpecs": [{"label": "Svetla", "value": "LED prednje + stop svetlo"}, {"label": "Aplikacija", "value": "Da (Bluetooth)"}],
+      "mainSpecs": {
+        "motorPower": 240,
+        "batteryVoltage": 72,
+        "batteryCapacity": 20,
+        "range": 80,
+        "topSpeed": 25,
+        "maxLoad": 150,
+        "tireSize": "16\""
+      },
+      "extraSpecs": [
+        {
+          "label": "Brzina",
+          "value": "25 km/h sa blokadom motora, do 45 km/h bez blokade"
+        },
+        {
+          "label": "Radijus kretanja",
+          "value": "40 – 80 km"
+        }
+      ],
       "colorVariants": [
-        {"name": "Mat crna", "hex": "#1f1f1f", "inStock": true, "sku": "VCX-BLK"},
-        {"name": "Bela", "hex": "#f2f2f2", "inStock": true, "sku": "VCX-WHT"},
-        {"name": "Tamnoplava", "hex": "#1e3a8a", "inStock": false, "sku": "VCX-NVY"}
+        {
+          "name": "Srebrna",
+          "hex": "#b8bcc2",
+          "inStock": true,
+          "photos": [
+            {
+              "file": "images/hulk-srebrna.jpg"
+            }
+          ]
+        }
       ]
     },
     {
-      "id": "scooter-voltra-max-pro",
-      "name": "Voltra Max Pro",
-      "slug": "voltra-max-pro",
-      "brand": "brand-voltra",
+      "id": "scooter-vespi",
+      "name": "VESPI",
+      "slug": "vespi",
+      "brand": "brand-xtreme-motors",
       "category": "cat-gradski",
-      "excerpt": "Veća baterija i dvostruko kočenje za duže relacije – do 60 km sa jednim punjenjem.",
-      "description": "Max Pro je za one koji svakodnevno prelaze veće razdaljine. Duplo amortizovan ram i disk kočnice napred i nazad daju sigurnost pri većim brzinama.",
-      "price": 89990,
+      "excerpt": "Retro dizajn u bojama italijanske trobojke, baterija 72V 27Ah i domet do 80 km.",
+      "description": "VESPI spaja klasičan retro izgled sa modernom tehnikom. Baterija od 72V 27Ah daje domet od 40 do 80 km, a motor od 240W i nosivost do 150 kg čine ga pouzdanim za svakodnevnu vožnju.\n\nGume od 16\" i zadnji kofer daju udobnost i mesto za stvari.",
+      "price": 129999,
       "priceOnRequest": false,
       "featured": true,
       "order": 2,
-      "mainSpecs": {"motorPower": 500, "batteryVoltage": 48, "batteryCapacity": 15, "range": 60, "topSpeed": 25, "weight": 21, "maxLoad": 130, "chargeTime": 7, "tireSize": "10\" tubeless", "brakes": "Disk napred i nazad", "ipRating": "IPX5"},
-      "extraSpecs": [{"label": "Amortizeri", "value": "Napred i nazad"}, {"label": "Tempomat", "value": "Da"}, {"label": "Žmigavci", "value": "Integrisani u volan"}],
+      "mainSpecs": {
+        "motorPower": 240,
+        "batteryVoltage": 72,
+        "batteryCapacity": 27,
+        "range": 80,
+        "topSpeed": 25,
+        "maxLoad": 150,
+        "tireSize": "16\""
+      },
+      "extraSpecs": [
+        {
+          "label": "Brzina",
+          "value": "25 km/h sa blokadom motora, do 45 km/h bez blokade"
+        },
+        {
+          "label": "Radijus kretanja",
+          "value": "40 – 80 km"
+        }
+      ],
       "colorVariants": [
-        {"name": "Grafit siva", "hex": "#4b5563", "inStock": true, "sku": "VMP-GRY"},
-        {"name": "Crvena", "hex": "#b91c1c", "inStock": true, "sku": "VMP-RED"}
+        {
+          "name": "Italijanska trobojka",
+          "hex": "#c8102e",
+          "inStock": true,
+          "photos": []
+        }
       ]
     },
     {
-      "id": "scooter-urbo-terra-1000",
-      "name": "Urbo Terra 1000",
-      "slug": "urbo-terra-1000",
-      "brand": "brand-urbo",
-      "category": "cat-offroad",
-      "excerpt": "Dvomotorni off-road skuter sa širokim gumama za makadam, šumu i brda.",
-      "description": "Terra 1000 ima dva motora od po 500 W i hidraulične kočnice. Široke off-road gume od 11\" drže podlogu na šljunku i blatu.",
-      "price": null,
+      "id": "scooter-rx-3",
+      "name": "RX-3",
+      "slug": "rx-3",
+      "brand": "brand-xtreme-motors",
+      "category": "cat-gradski",
+      "excerpt": "Sportski izgled, LED svetla i najjača baterija 72V 27Ah za domet do 80 km.",
+      "description": "RX-3 je sportski gradski skuter agresivnog dizajna sa LED prednjim svetlima. Baterija od 72V 27Ah daje domet od 40 do 80 km, a nosivost je do 150 kg.\n\nMotor od 240W, gume od 16\" i zadnji kofer čine ga praktičnim za svakodnevne obaveze.",
       "priceOnRequest": true,
       "featured": true,
       "order": 3,
-      "mainSpecs": {"motorPower": 1000, "batteryVoltage": 52, "batteryCapacity": 23, "range": 75, "topSpeed": 25, "weight": 34, "maxLoad": 150, "chargeTime": 9, "tireSize": "11\" off-road", "brakes": "Hidraulične disk", "ipRating": "IPX5"},
-      "extraSpecs": [{"label": "Pogon", "value": "Dvomotorni (2×500 W)"}, {"label": "Amortizeri", "value": "Hidraulični, podesivi"}],
+      "mainSpecs": {
+        "motorPower": 240,
+        "batteryVoltage": 72,
+        "batteryCapacity": 27,
+        "range": 80,
+        "topSpeed": 25,
+        "maxLoad": 150,
+        "tireSize": "16\""
+      },
+      "extraSpecs": [
+        {
+          "label": "Brzina",
+          "value": "25 km/h sa blokadom motora, do 45 km/h bez blokade"
+        },
+        {
+          "label": "Radijus kretanja",
+          "value": "40 – 80 km"
+        }
+      ],
       "colorVariants": [
-        {"name": "Maslinasta", "hex": "#4d5b2f", "inStock": true, "sku": "UT1-OLV"},
-        {"name": "Crna", "hex": "#111111", "inStock": true, "sku": "UT1-BLK"},
-        {"name": "Narandžasta", "hex": "#ea580c", "inStock": true, "sku": "UT1-ORG"}
+        {
+          "name": "Tamnocrvena",
+          "hex": "#7a0e15",
+          "inStock": true,
+          "photos": []
+        }
       ]
     },
     {
-      "id": "scooter-urbo-mini",
-      "name": "Urbo Mini",
-      "slug": "urbo-mini",
-      "brand": "brand-urbo",
-      "category": "cat-deciji",
-      "excerpt": "Dečiji električni skuter sa ograničenjem brzine i podesivim volanom (8–14 god).",
-      "description": "Urbo Mini ima tri režima brzine koje roditelj zaključava, i volan koji raste zajedno sa detetom.",
-      "price": 29990,
+      "id": "scooter-wind",
+      "name": "WIND",
+      "slug": "wind",
+      "brand": "brand-xtreme-motors",
+      "category": "cat-gradski",
+      "excerpt": "Snažna 60V 20Ah baterija, domet do 60 km i prostrani gepek – u beloj, srebrnoj i crvenoj boji.",
+      "description": "WIND je pouzdan gradski skuter sa baterijom od 60V 20Ah i dometom od 40 do 60 km. Motor od 240W i nosivost do 150 kg čine ga dobrim izborom za svakodnevni posao i gradske obaveze.\n\nGume od 16\" i zadnji kofer za stvari daju udobnost i praktičnost na svakoj vožnji.",
+      "price": 99999,
+      "priceOnRequest": false,
+      "featured": true,
+      "order": 4,
+      "mainSpecs": {
+        "motorPower": 240,
+        "batteryVoltage": 60,
+        "batteryCapacity": 20,
+        "range": 60,
+        "topSpeed": 25,
+        "maxLoad": 150,
+        "tireSize": "16\""
+      },
+      "extraSpecs": [
+        {
+          "label": "Brzina",
+          "value": "25 km/h sa blokadom motora, do 45 km/h bez blokade"
+        },
+        {
+          "label": "Radijus kretanja",
+          "value": "40 – 60 km"
+        }
+      ],
+      "colorVariants": [
+        {
+          "name": "Bela",
+          "hex": "#f2f2f2",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5309.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5318.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5331.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5338.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5325.jpg"
+            }
+          ]
+        },
+        {
+          "name": "Srebrna",
+          "hex": "#b8bcc2",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5761.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5750.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5765.jpg"
+            }
+          ]
+        },
+        {
+          "name": "Crvena",
+          "hex": "#b3121f",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/SV.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/viber_slika_2023-05-15_09-16-09-739.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/viber_slika_2023-05-15_09-16-07-199.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/viber_slika_2023-05-15_09-16-08-406.jpg"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scooter-hawk",
+      "name": "HAWK",
+      "slug": "hawk",
+      "brand": "brand-xtreme-motors",
+      "category": "cat-gradski",
+      "excerpt": "Izmenjiva baterija 48V 12Ah, prednja disk kočnica i LED svetla – u četiri boje.",
+      "description": "HAWK je moderan gradski skuter sa izmenjivom baterijom od 48V 12Ah – bateriju možete izvaditi i puniti kod kuće ili na poslu. Domet je do 50 km, a nosivost do 150 kg.\n\nPrednja disk kočnica, LED prednje oboreno i dugo svetlo i LED prednji žmigavci daju sigurnost i noću i danju.",
+      "price": 89999,
       "priceOnRequest": false,
       "featured": false,
-      "order": 4,
-      "mainSpecs": {"motorPower": 150, "batteryVoltage": 24, "batteryCapacity": 4, "range": 12, "topSpeed": 14, "weight": 8, "maxLoad": 60, "chargeTime": 3, "tireSize": "6.5\" pune", "brakes": "Nožna + elektronska", "ipRating": "IPX4"},
-      "extraSpecs": [{"label": "Uzrast", "value": "8–14 godina"}, {"label": "Roditeljska kontrola", "value": "Zaključavanje brzine"}],
+      "order": 5,
+      "mainSpecs": {
+        "batteryVoltage": 48,
+        "batteryCapacity": 12,
+        "range": 50,
+        "topSpeed": 25,
+        "maxLoad": 150,
+        "brakes": "Prednja disk kočnica"
+      },
+      "extraSpecs": [
+        {
+          "label": "Brzina",
+          "value": "25 km/h sa blokadom motora, do 45 km/h bez blokade"
+        },
+        {
+          "label": "Baterija",
+          "value": "Izmenjiva (vadi se za punjenje)"
+        },
+        {
+          "label": "Svetla",
+          "value": "LED prednje oboreno i dugo svetlo, LED prednji žmigavci"
+        }
+      ],
       "colorVariants": [
-        {"name": "Plava", "hex": "#2563eb", "inStock": true, "sku": "UMI-BLU"},
-        {"name": "Roze", "hex": "#ec4899", "inStock": true, "sku": "UMI-PNK"},
-        {"name": "Zelena", "hex": "#16a34a", "inStock": false, "sku": "UMI-GRN"}
+        {
+          "name": "Plava",
+          "hex": "#1f3fa8",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2023/09/viber_image_2024-06-25_13-03-09-795.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2023/09/viber_image_2024-06-25_13-03-11-549.jpg"
+            }
+          ]
+        },
+        {
+          "name": "Crvena",
+          "hex": "#b3121f",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2023/09/viber_image_2024-06-25_13-02-37-310.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2023/09/viber_image_2024-06-25_13-02-56-610.jpg"
+            }
+          ]
+        },
+        {
+          "name": "Srebrna",
+          "hex": "#b8bcc2",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2023/09/viber_image_2024-06-25_13-03-01-523.jpg"
+            }
+          ]
+        },
+        {
+          "name": "Crna",
+          "hex": "#1f1f1f",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2023/09/viber_image_2024-06-25_13-03-05-485.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2023/09/viber_image_2024-06-25_13-02-35-867.jpg"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scooter-dust",
+      "name": "DUST",
+      "slug": "dust",
+      "brand": "brand-xtreme-motors",
+      "category": "cat-gradski",
+      "excerpt": "Pristupačan gradski skuter sa korpom, zadnjim sedištem i pedalama – idealan za kupovinu i kratke vožnje.",
+      "description": "DUST je pristupačan i praktičan gradski skuter. Akumulatori 4×12V daju domet do 40 km, a nosivost je do 150 kg.\n\nU opremu spadaju zadnje sedište, prednja korpa, zadnji amortizeri, pedale, daljinski sa alarmom, svetlo, zadnji migavci i retrovizori.",
+      "price": 59999,
+      "priceOnRequest": false,
+      "featured": false,
+      "order": 6,
+      "mainSpecs": {
+        "motorPower": 240,
+        "batteryVoltage": 48,
+        "range": 40,
+        "topSpeed": 25,
+        "maxLoad": 150,
+        "tireSize": "14\""
+      },
+      "extraSpecs": [
+        {
+          "label": "Akumulatori",
+          "value": "4 × 12V"
+        },
+        {
+          "label": "Brzina",
+          "value": "do 25 km/h sa blokadom motora"
+        },
+        {
+          "label": "Oprema",
+          "value": "Zadnje sedište, prednja korpa, zadnji amortizeri, pedale, daljinski / alarm, svetlo, zadnji migavci, retrovizori"
+        }
+      ],
+      "colorVariants": [
+        {
+          "name": "Crvena",
+          "hex": "#b3121f",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5521.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5559.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5519.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_5541.jpg"
+            }
+          ]
+        },
+        {
+          "name": "Bela",
+          "hex": "#f2f2f2",
+          "inStock": true,
+          "photos": [
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_1265.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_1270.jpg"
+            },
+            {
+              "url": "https://xtreme.rs/wp-content/uploads/2021/11/DSC_1209.jpg"
+            }
+          ]
+        }
       ]
     }
   ]

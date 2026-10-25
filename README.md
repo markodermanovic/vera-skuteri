@@ -20,7 +20,20 @@ cp web/.env.example web/.env   # već sadrži Turnstile TEST ključeve
 npm run dev                    # http://localhost:4321
 ```
 
-Bez `SANITY_PROJECT_ID` sajt koristi demo podatke iz `web/src/data/sample-scooters.json`.
+`npm run dev` čita Sanity dataset **development** (probni sadržaj), a `npm run dev:live -w web` čita **production** (sadržaj sa sajta).
+Bez `SANITY_PROJECT_ID` sajt koristi podatke iz `web/src/data/sample-scooters.json`.
+
+### Katalog: prvo lokalno, pa na sajt
+
+Modeli, cene, specifikacije i izvori slika su u `web/src/data/sample-scooters.json` (slike: `photos` – URL ili fajl iz `studio/seed/images/`).
+
+```bash
+cd studio
+SANITY_STUDIO_DATASET=development npx sanity exec seed/import-catalog.mjs --with-user-token -- --prune   # proba lokalno (npm run dev)
+npx sanity exec seed/import-catalog.mjs --with-user-token -- --prune                                    # objava na sajt (production)
+```
+
+`--prune` briše skutere i brendove kojih nema u fajlu. Objava u production pokreće webhook i Cloudflare build (~1 min).
 Bez `RESEND_API_KEY` upiti se u dev modu samo ispisuju u konzolu.
 
 ## Povezivanje Sanity-ja

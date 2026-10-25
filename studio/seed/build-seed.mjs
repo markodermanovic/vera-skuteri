@@ -33,8 +33,8 @@ const docs = [
     order: s.order,
     mainSpecs: {_type: 'mainSpecs', ...s.mainSpecs},
     extraSpecs: s.extraSpecs.map((e, i) => ({_type: 'spec', _key: key('e', i), ...e})),
-    // Slike se dodaju kroz Studio – sajt do tada prikazuje ilustraciju u boji varijante.
-    colorVariants: s.colorVariants.map((v, i) => ({_type: 'colorVariant', _key: key('v', i), ...v, images: []})),
+    // Slike se ovde ne uvoze (vidi seed/import-catalog.mjs) – sajt do tada prikazuje ilustraciju u boji varijante.
+    colorVariants: s.colorVariants.map(({photos, ...v}, i) => ({_type: 'colorVariant', _key: key('v', i), ...v, images: []})),
   })),
 ]
 

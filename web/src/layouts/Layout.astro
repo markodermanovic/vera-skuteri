@@ -61,11 +61,14 @@ const isActive = (href: string) => (href === '/' ? Astro.url.pathname === '/' : 
 
     <header data-header class="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur">
       <div class="container-page flex h-16 items-center justify-between gap-4">
-        <a href="/" class="group flex items-center gap-2 whitespace-nowrap text-lg font-extrabold tracking-tight">
-          <span class="grid size-9 place-items-center rounded-xl bg-brand text-white transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-105" aria-hidden="true">
-            <svg viewBox="0 0 24 24" class="size-5" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" /></svg>
-          </span>
-          <span class="max-[419px]:sr-only">{settings.companyName}</span>
+        <a href="/" class="group flex shrink-0 items-center">
+          <img
+            src="/logo-xtreme-motors.png"
+            alt={settings.companyName}
+            width="300"
+            height="120"
+            class="h-11 w-auto transition-transform duration-500 group-hover:scale-105"
+          />
         </a>
         <nav aria-label="Glavna navigacija">
           <ul data-nav class="relative flex items-center gap-1 text-sm font-semibold sm:gap-2">
@@ -92,8 +95,8 @@ const isActive = (href: string) => (href === '/' ? Astro.url.pathname === '/' : 
       <div class="h-1 bg-gradient-to-r from-brand-dark via-brand to-brand-dark"></div>
       <div class="container-page grid gap-10 py-14 sm:grid-cols-3">
         <div>
-          <p class="text-lg font-extrabold text-white">{settings.companyName}</p>
-          <p class="mt-2 text-sm">Električni skuteri za grad, teren i najmlađe.</p>
+          <img src="/logo-xtreme-motors.png" alt={settings.companyName} width="300" height="120" loading="lazy" class="h-14 w-auto brightness-0 invert" />
+          <p class="mt-3 text-sm">Električni skuteri za svakodnevnu gradsku vožnju.</p>
         </div>
         <div class="text-sm">
           <p class="mb-2 font-semibold text-white">Kontakt</p>
