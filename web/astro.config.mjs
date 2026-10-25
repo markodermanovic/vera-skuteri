@@ -25,7 +25,7 @@ export default defineConfig({
       INQUIRY_FROM_EMAIL: envField.string({
         context: 'server',
         access: 'public',
-        default: 'Acko Skuteri <upiti@ackoskuteri.rs>',
+        default: 'Xtreme Motors <onboarding@resend.dev>',
       }),
     },
   },

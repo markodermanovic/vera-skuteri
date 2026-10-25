@@ -6,7 +6,7 @@ import {structure} from './structure'
 
 export default defineConfig({
   name: 'default',
-  title: 'Acko Skuteri',
+  title: 'Xtreme Motors',
   projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   plugins: [structureTool({structure}), visionTool()],

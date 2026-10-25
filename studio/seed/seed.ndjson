@@ -1,4 +1,4 @@
-{"_id":"siteSettings","_type":"siteSettings","companyName":"Acko Skuteri","phone":"+381 60 000 0000","email":"prodaja@ackoskuteri.rs","address":"Bulevar oslobođenja 1\n21000 Novi Sad","workingHours":"Pon–Pet 09–18h, Sub 09–14h","social":[{"_key":"so0","label":"Instagram","url":"https://instagram.com/"}]}
+{"_id":"siteSettings","_type":"siteSettings","companyName":"Xtreme Motors","phone":"+381 60 000 0000","email":"infoxtrememotori@gmail.com","address":"Bulevar oslobođenja 1\n21000 Novi Sad","workingHours":"Pon–Pet 09–18h, Sub 09–14h","social":[{"_key":"so0","label":"Instagram","url":"https://instagram.com/"}]}
 {"_id":"brand-voltra","_type":"brand","name":"Voltra","slug":{"_type":"slug","current":"voltra"}}
 {"_id":"brand-urbo","_type":"brand","name":"Urbo","slug":{"_type":"slug","current":"urbo"}}
 {"_id":"cat-gradski","_type":"category","name":"Gradski","description":"Lagani skuteri za svakodnevnu vožnju kroz grad.","slug":{"_type":"slug","current":"gradski"}}
