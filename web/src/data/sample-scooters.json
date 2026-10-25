@@ -120,7 +120,11 @@
           "name": "Italijanska trobojka",
           "hex": "#c8102e",
           "inStock": true,
-          "photos": []
+          "photos": [
+            {
+              "file": "images/vespi-trobojka.jpg"
+            }
+          ]
         }
       ]
     },
@@ -159,7 +163,11 @@
           "name": "Tamnocrvena",
           "hex": "#7a0e15",
           "inStock": true,
-          "photos": []
+          "photos": [
+            {
+              "file": "images/rx-3-tamnocrvena.jpg"
+            }
+          ]
         }
       ]
     },
