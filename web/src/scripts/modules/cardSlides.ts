@@ -1,10 +1,11 @@
 import { prefersReducedMotion, type Cleanup } from '../lib/motion';
 
-const STEP_MS = 1100;
+const STEP_MS = 3000;
 
 /**
- * Kartice skutera sa više boja ([data-card-slides]): na hover se slike prevlače kroz sve boje,
- * a aktivna boja se ističe među kružićima. Prelaz mišem preko kružića skače na tu boju.
+ * Kartice skutera sa više boja ([data-card-slides]): na hover se slike polako pretapaju kroz sve boje
+ * (na 3 s, uz blago uvećanje – global.css .card-slide), a aktivna boja se ističe među kružićima.
+ * Prelaz mišem preko kružića skače na tu boju.
  * Samo za pravi pokazivač (miš) – na dodir kartica ostaje na prvoj boji.
  */
 export function initCardSlides(scope: HTMLElement): Cleanup {
@@ -14,14 +15,15 @@ export function initCardSlides(scope: HTMLElement): Cleanup {
   scope.querySelectorAll<HTMLElement>('[data-card-slides]').forEach((frame) => {
     const card = frame.closest<HTMLElement>('.scooter-card')!;
     const track = frame.querySelector<HTMLElement>('[data-card-track]')!;
-    const count = track.children.length;
+    const slides = [...track.children] as HTMLElement[];
+    const count = slides.length;
     const dots = [...card.querySelectorAll<HTMLElement>('[data-card-dot]')];
     let index = 0;
     let timer: number | undefined;
 
     const show = (i: number) => {
       index = (i + count) % count;
-      track.style.transform = `translateX(${-index * 100}%)`;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
       dots.forEach((d) => d.classList.toggle('is-active', Number(d.dataset.cardDot) === index));
     };
     const stop = () => window.clearInterval(timer);
@@ -32,7 +34,7 @@ export function initCardSlides(scope: HTMLElement): Cleanup {
     const onEnter = () => {
       // Slike van okvira su lazy – učitaj ih čim miš priđe kartici
       track.querySelectorAll('img').forEach((img) => (img.loading = 'eager'));
-      show(index + 1);
+      show(index); // prva boja ostaje i polako zumira, smena posle 3 s
       play();
     };
     const onLeave = () => {
