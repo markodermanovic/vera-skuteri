@@ -1,0 +1,124 @@
+---
+import '../styles/global.css';
+import { getSettings } from '../lib/content';
+
+interface Props {
+  title: string;
+  /** Barba namespace – bira init logiku stranice u src/scripts/pages */
+  namespace: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const { title, namespace, description = 'Električni skuteri – gradski, off-road i dečiji modeli. Pošaljite upit i javljamo vam se u najkraćem roku.', ogImage, noindex } = Astro.props;
+const settings = await getSettings();
+const fullTitle = title === settings.companyName ? title : `${title} | ${settings.companyName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const nav = [
+  { href: '/', label: 'Početna' },
+  { href: '/skuteri', label: 'Skuteri' },
+  { href: '/kontakt', label: 'Kontakt' },
+];
+const isActive = (href: string) => (href === '/' ? Astro.url.pathname === '/' : Astro.url.pathname.startsWith(href));
+---
+
+<!doctype html>
+<html lang="sr-Latn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#a60000" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="sr_RS" />
+    <meta property="og:site_name" content={settings.companyName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=latin-ext" rel="stylesheet" />
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-screen flex-col" data-barba="wrapper">
+    <a href="#main" data-barba-prevent class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2">Preskoči na sadržaj</a>
+
+    <div class="hidden h-9 bg-gradient-to-r from-brand-dark to-brand text-xs font-medium text-white/90 sm:block">
+      <div class="container-page flex h-full items-center justify-between">
+        <div class="flex gap-5">
+          <a class="link-underline" href={`tel:${settings.phone.replace(/\s/g, '')}`}>{settings.phone}</a>
+          <a class="link-underline" href={`mailto:${settings.email}`}>{settings.email}</a>
+        </div>
+        {settings.workingHours && <p>{settings.workingHours}</p>}
+      </div>
+    </div>
+
+    <header data-header class="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur">
+      <div class="container-page flex h-16 items-center justify-between gap-4">
+        <a href="/" class="group flex items-center gap-2 whitespace-nowrap text-lg font-extrabold tracking-tight">
+          <span class="grid size-9 place-items-center rounded-xl bg-brand text-white transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-105" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="size-5" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" /></svg>
+          </span>
+          <span class="max-[419px]:sr-only">{settings.companyName}</span>
+        </a>
+        <nav aria-label="Glavna navigacija">
+          <ul data-nav class="relative flex items-center gap-1 text-sm font-semibold sm:gap-2">
+            <span data-nav-pill class="pointer-events-none invisible absolute left-0 top-0 h-full rounded-full bg-brand" aria-hidden="true"></span>
+            {nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="relative z-10 block rounded-full px-3 py-2 transition-colors duration-300 hover:text-brand aria-[current=page]:text-white aria-[current=page]:hover:text-white"
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                >{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="flex-1" data-barba="container" data-barba-namespace={namespace}>
+      <slot />
+    </main>
+
+    <footer class="mt-24 bg-ink text-white/70">
+      <div class="h-1 bg-gradient-to-r from-brand-dark via-brand to-brand-dark"></div>
+      <div class="container-page grid gap-10 py-14 sm:grid-cols-3">
+        <div>
+          <p class="text-lg font-extrabold text-white">{settings.companyName}</p>
+          <p class="mt-2 text-sm">Električni skuteri za grad, teren i najmlađe.</p>
+        </div>
+        <div class="text-sm">
+          <p class="mb-2 font-semibold text-white">Kontakt</p>
+          <p><a class="link-underline hover:text-white" href={`tel:${settings.phone.replace(/\s/g, '')}`}>{settings.phone}</a></p>
+          <p><a class="link-underline hover:text-white" href={`mailto:${settings.email}`}>{settings.email}</a></p>
+          {settings.address && <p class="mt-2 whitespace-pre-line">{settings.address}</p>}
+          {settings.workingHours && <p class="mt-2">{settings.workingHours}</p>}
+        </div>
+        <div class="text-sm">
+          <p class="mb-2 font-semibold text-white">Linkovi</p>
+          <ul class="space-y-1">
+            {nav.map((item) => <li><a class="link-underline hover:text-white" href={item.href}>{item.label}</a></li>)}
+            <li><a class="link-underline hover:text-white" href="/politika-privatnosti">Politika privatnosti</a></li>
+            {settings.social.map((s) => <li><a class="link-underline hover:text-white" href={s.url} rel="noopener" target="_blank">{s.label}</a></li>)}
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 py-5 text-center text-xs text-white/40">
+        © {new Date().getFullYear()} {settings.companyName}. Sva prava zadržana.
+      </div>
+    </footer>
+
+
+    <script>
+      import '../scripts/app';
+    </script>
+  </body>
+</html>

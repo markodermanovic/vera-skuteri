@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
+import { getScooters, getSettings } from '../lib/content';
+
+const [scooters, settings] = await Promise.all([getScooters(), getSettings()]);
+const colorsByModel = Object.fromEntries(scooters.map((s) => [s.slug, s.colorVariants.map((v) => v.name)]));
+const tel = settings.phone.replace(/\s/g, '');
+---
+
+<Layout title="Kontakt" namespace="contact" description="Pošaljite upit za model skutera koji vas zanima – javljamo vam se telefonom ili mejlom.">
+  <section class="container-page pt-12">
+    <h1 class="text-4xl font-extrabold tracking-tight sm:text-6xl">Pošaljite upit</h1>
+    <p data-reveal class="mt-3 max-w-2xl text-muted">
+      Izaberite model i boju, ostavite kontakt – javljamo vam se sa ponudom, dostupnošću i rokom isporuke. Online plaćanje ne postoji, sve dogovaramo direktno.
+    </p>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
+      <form id="forma" method="post" action="/api/upit" data-reveal class="scroll-mt-24 rounded-[2rem] border border-line bg-white p-6 sm:p-10" novalidate>
+        <div id="form-error" role="alert" class="mb-6 hidden rounded-xl bg-brand-soft px-4 py-3 text-sm font-semibold text-brand-dark"></div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="model" class="label">Model *</label>
+            <select id="model" name="model" required class="field">
+              <option value="">Izaberite model</option>
+              {scooters.map((s) => <option value={s.slug}>{s.name}</option>)}
+              <option value="ostalo">Nisam siguran / opšte pitanje</option>
+            </select>
+            <p class="error mt-1 text-sm font-medium text-brand" data-for="model"></p>
+          </div>
+          <div>
+            <label for="color" class="label">Boja</label>
+            <select id="color" name="color" class="field" disabled>
+              <option value="">Prvo izaberite model</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="name" class="label">Ime i prezime *</label>
+            <input id="name" name="name" autocomplete="name" required class="field" />
+            <p class="error mt-1 text-sm font-medium text-brand" data-for="name"></p>
+          </div>
+          <div>
+            <label for="phone" class="label">Telefon *</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="06x xxx xxxx" required class="field" />
+            <p class="error mt-1 text-sm font-medium text-brand" data-for="phone"></p>
+          </div>
+          <div>
+            <label for="email" class="label">Email *</label>
+            <input id="email" name="email" type="email" autocomplete="email" required class="field" />
+            <p class="error mt-1 text-sm font-medium text-brand" data-for="email"></p>
+          </div>
+
+          <fieldset class="sm:col-span-2">
+            <legend class="label">Kako da vas kontaktiramo?</legend>
+            <div class="flex gap-6">
+              <label class="flex items-center gap-2"><input type="radio" name="contactPreference" value="telefon" checked class="size-4 accent-brand" /> Telefonom</label>
+              <label class="flex items-center gap-2"><input type="radio" name="contactPreference" value="email" class="size-4 accent-brand" /> Mejlom</label>
+            </div>
+          </fieldset>
+
+          <div class="sm:col-span-2">
+            <label for="message" class="label">Poruka</label>
+            <textarea id="message" name="message" rows="4" maxlength="2000" class="field" placeholder="Npr. da li je dostupna isporuka u Beograd, plaćanje na rate…"></textarea>
+          </div>
+
+          <!-- honeypot -->
+          <div class="hidden" aria-hidden="true">
+            <label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="flex items-start gap-3 text-sm">
+              <input type="checkbox" name="consent" required class="mt-0.5 size-4 accent-brand" />
+              <span>Saglasan/na sam da {settings.companyName} obrađuje moje podatke radi odgovora na upit, u skladu sa <a href="/politika-privatnosti" class="font-semibold text-brand underline">politikom privatnosti</a>. *</span>
+            </label>
+            <p class="error mt-1 text-sm font-medium text-brand" data-for="consent"></p>
+          </div>
+
+          {PUBLIC_TURNSTILE_SITE_KEY && <div class="min-h-[65px] sm:col-span-2" data-turnstile></div>}
+        </div>
+
+        <button type="submit" class="btn-primary mt-8 w-full sm:w-auto">
+          <span class="label-idle inline-flex items-center gap-2">Pošalji upit <span class="arrow" aria-hidden="true">→</span></span>
+          <span class="label-busy inline-flex items-center gap-2">
+            <span class="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" aria-hidden="true"></span>
+            Šaljem…
+          </span>
+        </button>
+        <script type="application/json" id="colors-by-model" set:html={JSON.stringify(colorsByModel)} />
+      </form>
+
+      <aside class="space-y-4">
+        <div data-reveal class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand to-brand-dark p-8 text-white">
+          <p class="text-sm font-semibold uppercase tracking-widest text-white/70">Radije zovete?</p>
+          <a href={`tel:${tel}`} class="link-underline mt-3 inline-block text-2xl font-extrabold">{settings.phone}</a>
+          <a href={`mailto:${settings.email}`} class="link-underline mt-1 block w-fit text-white/80 hover:text-white">{settings.email}</a>
+          {settings.workingHours && <p class="mt-4 text-sm text-white/60">{settings.workingHours}</p>}
+        </div>
+        {settings.address && (
+          <div data-reveal class="rounded-[2rem] border border-line bg-white p-8">
+            <p class="font-semibold">Adresa</p>
+            <p class="mt-1 whitespace-pre-line text-muted">{settings.address}</p>
+          </div>
+        )}
+      </aside>
+    </div>
+  </section>
+</Layout>

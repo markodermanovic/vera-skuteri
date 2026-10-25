@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSettings } from '../lib/content';
+const settings = await getSettings();
+---
+
+<Layout title="Hvala na upitu" namespace="thanks" noindex>
+  <section class="container-page py-24 text-center">
+    <div class="mx-auto grid size-20 animate-pop place-items-center rounded-full bg-brand text-white shadow-[0_16px_40px_-12px_rgb(166_0_0/0.6)]">
+      <svg viewBox="0 0 24 24" class="size-10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1" stroke-dasharray="1" class="animate-draw" />
+      </svg>
+    </div>
+    <h1 class="mt-8 text-4xl font-extrabold tracking-tight sm:text-5xl">Hvala, upit je poslat!</h1>
+    <p data-reveal class="mx-auto mt-4 max-w-lg text-muted">
+      Poslali smo vam potvrdu na email. Javićemo vam se u najkraćem roku – obično istog radnog dana.
+      Ako vam je hitno, pozovite <a class="link-underline font-semibold text-brand" href={`tel:${settings.phone.replace(/\s/g, '')}`}>{settings.phone}</a>.
+    </p>
+    <div data-reveal class="mt-10">
+      <a href="/skuteri" class="btn-primary">Nazad na skutere <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</Layout>

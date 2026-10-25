@@ -1,0 +1,10 @@
+{
+  "name": "acko-skuteri",
+  "private": true,
+  "workspaces": ["web", "studio"],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "build": "npm run build -w web",
+    "studio": "npm run dev -w studio"
+  }
+}

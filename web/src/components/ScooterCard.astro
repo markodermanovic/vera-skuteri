@@ -1,0 +1,58 @@
+---
+import ScooterArt from './ScooterArt.astro';
+import { formatPrice } from '../lib/format';
+import type { Scooter } from '../lib/types';
+
+interface Props {
+  scooter: Scooter;
+}
+const { scooter } = Astro.props;
+const first = scooter.colorVariants[0];
+const image = first?.images[0];
+const { range, topSpeed, motorPower } = scooter.mainSpecs;
+---
+
+<article
+  data-reveal
+  class="scooter-card group relative flex flex-col overflow-hidden rounded-3xl border border-line bg-white transition-[box-shadow,border-color,translate,opacity] duration-500 ease-out-expo hover:-translate-y-1.5 hover:border-brand/30 hover:shadow-[0_24px_48px_-24px_rgb(166_0_0/0.35)]"
+  data-category={scooter.category?.slug}
+  data-brand={scooter.brand?.slug}
+  data-price={scooter.priceOnRequest ? '' : scooter.price}
+  data-range={range ?? 0}
+  data-name={scooter.name}
+>
+  <div class="relative aspect-[4/3] overflow-hidden bg-[#ececec]">
+    {image ? (
+      <img src={image.src} srcset={image.srcset} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" class="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" />
+    ) : (
+      first && <ScooterArt color={first.hex} label={`${scooter.name} – ${first.name}`} class="size-full transition-transform duration-700 ease-out-expo group-hover:scale-105" />
+    )}
+    {scooter.featured && <span class="absolute left-4 top-4 rounded-full bg-brand px-3 py-1 text-xs font-bold text-white">Izdvojeno</span>}
+    <span class="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-between bg-brand px-5 py-3 text-sm font-semibold text-white transition-transform duration-500 ease-out-expo group-hover:translate-y-0" aria-hidden="true">
+      Pogledaj model <span>→</span>
+    </span>
+  </div>
+  <div class="flex flex-1 flex-col p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-muted">{[scooter.brand?.name, scooter.category?.name].filter(Boolean).join(' · ')}</p>
+    <h3 class="mt-1 text-xl font-bold transition-colors duration-300 group-hover:text-brand">
+      <a href={`/skuteri/${scooter.slug}`} class="after:absolute after:inset-0">{scooter.name}</a>
+    </h3>
+    <ul class="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
+      {range && <li class="rounded-full bg-paper px-2.5 py-1">{range} km</li>}
+      {topSpeed && <li class="rounded-full bg-paper px-2.5 py-1">{topSpeed} km/h</li>}
+      {motorPower && <li class="rounded-full bg-paper px-2.5 py-1">{motorPower} W</li>}
+    </ul>
+    <div class="mt-auto flex items-end justify-between pt-5">
+      <p class="text-lg font-extrabold text-brand">{formatPrice(scooter)}</p>
+      <ul class="flex -space-x-1" aria-label={`Dostupne boje: ${scooter.colorVariants.map((v) => v.name).join(', ')}`}>
+        {scooter.colorVariants.map((v, i) => (
+          <li
+            class="size-5 rounded-full shadow-[inset_0_0_0_1px_rgb(0_0_0/0.15)] ring-2 ring-white transition-transform duration-300 group-hover:translate-x-[calc(var(--i)*3px)]"
+            style={`background:${v.hex};--i:${i}`}
+            title={v.name}
+          />
+        ))}
+      </ul>
+    </div>
+  </div>
+</article>

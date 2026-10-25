@@ -1,0 +1,12 @@
+node_modules
+dist
+.astro
+.wrangler
+.env
+.dev.vars
+studio/dist
+studio/.sanity
+.DS_Store
+
+# lokalna podešavanja editora / Claude preview
+.claude

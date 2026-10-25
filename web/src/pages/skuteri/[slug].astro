@@ -1,0 +1,180 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import ScooterArt from '../../components/ScooterArt.astro';
+import ScooterCard from '../../components/ScooterCard.astro';
+import { getScooters } from '../../lib/content';
+import { formatPrice, specRows } from '../../lib/format';
+import type { Scooter } from '../../lib/types';
+
+export const getStaticPaths = (async () => {
+  const scooters = await getScooters();
+  return scooters.map((scooter) => ({
+    params: { slug: scooter.slug },
+    props: {
+      scooter,
+      related: scooters.filter((s) => s.id !== scooter.id && s.category?.slug === scooter.category?.slug).slice(0, 3),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  scooter: Scooter;
+  related: Scooter[];
+}
+const { scooter, related } = Astro.props;
+const variants = scooter.colorVariants;
+const specs = [...specRows(scooter.mainSpecs), ...scooter.extraSpecs];
+const inquiryHref = (variant?: string) =>
+  `/kontakt?${new URLSearchParams({ model: scooter.slug, ...(variant ? { boja: variant } : {}) })}`;
+const firstImage = variants.find((v) => v.images[0])?.images[0];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: scooter.name,
+  description: scooter.excerpt,
+  brand: scooter.brand && { '@type': 'Brand', name: scooter.brand.name },
+  image: variants.flatMap((v) => v.images.map((i) => i.src)),
+  url: new URL(`/skuteri/${scooter.slug}`, Astro.site).href,
+  ...(!scooter.priceOnRequest && scooter.price != null && {
+    offers: variants.map((v) => ({
+      '@type': 'Offer',
+      sku: v.sku,
+      color: v.name,
+      price: scooter.price,
+      priceCurrency: 'RSD',
+      availability: v.inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+    })),
+  }),
+};
+---
+
+<Layout
+  namespace="scooter"
+  title={scooter.seo?.title ?? scooter.name}
+  description={scooter.seo?.description ?? scooter.excerpt}
+  ogImage={scooter.seo?.ogImage ?? firstImage?.src}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="container-page pt-8">
+    <nav aria-label="Putanja" data-reveal class="text-sm text-muted">
+      <ol class="flex flex-wrap gap-1.5">
+        <li><a href="/" class="link-underline hover:text-brand">Početna</a> /</li>
+        <li><a href="/skuteri" class="link-underline hover:text-brand">Skuteri</a> /</li>
+        <li aria-current="page" class="text-ink">{scooter.name}</li>
+      </ol>
+    </nav>
+
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1.2fr_1fr]">
+      <!-- Galerija: jedan panel po varijanti boje -->
+      <div data-reveal>
+        {variants.map((v, vi) => (
+          <div class="variant-panel" data-variant={v.name} hidden={vi !== 0}>
+            <div class="aspect-[4/3] overflow-hidden rounded-[2rem] bg-[#ececec]">
+              {v.images.length ? (
+                <img
+                  class="main-image size-full object-cover"
+                  src={v.images[0].src}
+                  srcset={v.images[0].srcset}
+                  sizes="(min-width: 1024px) 55vw, 100vw"
+                  alt={v.images[0].alt}
+                  width={v.images[0].width}
+                  height={v.images[0].height}
+                  loading={vi === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={vi === 0 ? 'high' : undefined}
+                />
+              ) : (
+                <ScooterArt color={v.hex} label={`${scooter.name} – ${v.name}`} class="size-full" />
+              )}
+            </div>
+            {v.images.length > 1 && (
+              <ul class="mt-3 grid grid-cols-5 gap-2">
+                {v.images.map((img, ii) => (
+                  <li>
+                    <button
+                      type="button"
+                      class="thumb block aspect-square w-full overflow-hidden rounded-xl ring-2 ring-transparent transition hover:opacity-80 aria-pressed:ring-brand"
+                      aria-pressed={ii === 0 ? 'true' : 'false'}
+                      aria-label={`Prikaži sliku ${ii + 1}`}
+                      data-src={img.src}
+                      data-srcset={img.srcset}
+                      data-alt={img.alt}
+                    >
+                      <img src={img.src} srcset={img.srcset} sizes="120px" alt="" loading="lazy" class="size-full object-cover" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <!-- Info -->
+      <div>
+        <p data-reveal class="text-sm font-semibold uppercase tracking-wider text-brand">{[scooter.brand?.name, scooter.category?.name].filter(Boolean).join(' · ')}</p>
+        <h1 class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{scooter.name}</h1>
+        {scooter.excerpt && <p data-reveal class="mt-4 text-lg text-ink/70">{scooter.excerpt}</p>}
+        <p data-reveal class="mt-6 text-3xl font-extrabold text-brand">{formatPrice(scooter)}</p>
+
+        {variants.length > 0 && (
+          <fieldset data-reveal class="mt-8">
+            <legend class="text-sm font-semibold">
+              Boja: <span id="variant-name">{variants[0].name}</span>
+              <span id="variant-stock" data-in-stock={String(variants[0].inStock)} class="group/stock ml-2 inline-flex items-center gap-1.5 rounded-full bg-paper px-2.5 py-0.5 text-xs font-semibold">
+                <span class="size-2 rounded-full bg-amber-500 group-data-[in-stock=true]/stock:animate-pulse-ring group-data-[in-stock=true]/stock:bg-success" aria-hidden="true"></span>
+                <span data-stock-label>{variants[0].inStock ? 'Na stanju' : 'Po porudžbini'}</span>
+              </span>
+            </legend>
+            <div class="mt-3 flex flex-wrap gap-3">
+              {variants.map((v, i) => (
+                <label class="cursor-pointer" title={v.name}>
+                  <input type="radio" name="variant" value={v.name} checked={i === 0} data-in-stock={String(v.inStock)} class="peer sr-only" />
+                  <span class="block size-10 rounded-full shadow-[inset_0_0_0_1px_rgb(0_0_0/0.15)] ring-2 ring-transparent ring-offset-2 ring-offset-paper transition duration-300 ease-out-expo hover:scale-110 active:scale-95 peer-checked:scale-110 peer-checked:ring-brand peer-focus-visible:ring-brand/50" style={`background:${v.hex}`}></span>
+                  <span class="sr-only">{v.name}{v.inStock ? '' : ' (po porudžbini)'}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        )}
+
+        <div data-reveal class="mt-8 flex flex-wrap gap-3">
+          <a id="inquiry-link" href={inquiryHref(variants[0]?.name)} data-base={inquiryHref()} class="btn-primary">Pošalji upit za ovaj model <span class="arrow" aria-hidden="true">→</span></a>
+          <a href="#specifikacije" data-barba-prevent class="btn-ghost">Specifikacije</a>
+        </div>
+        <p data-reveal class="mt-3 text-sm text-muted">Bez online plaćanja – javljamo vam se telefonom ili mejlom sa ponudom.</p>
+      </div>
+    </div>
+
+    <div class="mt-16 grid gap-10 lg:grid-cols-[1.2fr_1fr]">
+      <section id="specifikacije" aria-labelledby="spec-heading" class="scroll-mt-24">
+        <h2 id="spec-heading" data-reveal class="text-2xl font-extrabold">Specifikacije</h2>
+        <dl class="mt-4 divide-y divide-line overflow-hidden rounded-3xl border border-line bg-white">
+          {specs.map((row) => (
+            <div data-reveal class="grid grid-cols-2 gap-4 px-5 py-3 text-sm transition-colors hover:bg-brand-soft/50">
+              <dt class="text-muted">{row.label}</dt>
+              <dd class="font-semibold">{row.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+      {scooter.descriptionHtml && (
+        <section aria-labelledby="opis-heading">
+          <h2 id="opis-heading" data-reveal class="text-2xl font-extrabold">Opis</h2>
+          <div data-reveal class="prose-basic mt-4" set:html={scooter.descriptionHtml} />
+        </section>
+      )}
+    </div>
+
+    {related.length > 0 && (
+      <section class="mt-20" aria-labelledby="slicni">
+        <h2 id="slicni" data-reveal class="text-2xl font-extrabold">Slični modeli</h2>
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((s) => <ScooterCard scooter={s} />)}
+        </div>
+      </section>
+    )}
+  </div>
+</Layout>

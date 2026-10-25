@@ -1,0 +1,100 @@
+{
+  "brands": [
+    {"id": "brand-voltra", "name": "Voltra", "slug": "voltra"},
+    {"id": "brand-urbo", "name": "Urbo", "slug": "urbo"}
+  ],
+  "categories": [
+    {"id": "cat-gradski", "name": "Gradski", "slug": "gradski", "description": "Lagani skuteri za svakodnevnu vožnju kroz grad."},
+    {"id": "cat-offroad", "name": "Off-road", "slug": "off-road", "description": "Snažni skuteri za neravne terene."},
+    {"id": "cat-deciji", "name": "Dečiji", "slug": "deciji", "description": "Bezbedni skuteri za najmlađe."}
+  ],
+  "settings": {
+    "companyName": "Acko Skuteri",
+    "phone": "+381 60 000 0000",
+    "email": "prodaja@ackoskuteri.rs",
+    "address": "Bulevar oslobođenja 1\n21000 Novi Sad",
+    "workingHours": "Pon–Pet 09–18h, Sub 09–14h",
+    "social": [{"label": "Instagram", "url": "https://instagram.com/"}]
+  },
+  "scooters": [
+    {
+      "id": "scooter-voltra-city-x",
+      "name": "Voltra City X",
+      "slug": "voltra-city-x",
+      "brand": "brand-voltra",
+      "category": "cat-gradski",
+      "excerpt": "Lagan i sklopiv gradski skuter sa dometom do 35 km – idealan za posao i fakultet.",
+      "description": "Voltra City X je napravljen za svakodnevnu gradsku vožnju. Sklapa se u tri sekunde, staje u gepek i lako se nosi u javni prevoz.\n\nAluminijumski ram i vazdušne gume od 10\" daju udobnu vožnju i po lošijem asfaltu.",
+      "price": 54990,
+      "priceOnRequest": false,
+      "featured": true,
+      "order": 1,
+      "mainSpecs": {"motorPower": 350, "batteryVoltage": 36, "batteryCapacity": 10, "range": 35, "topSpeed": 25, "weight": 14.5, "maxLoad": 120, "chargeTime": 5, "tireSize": "10\" vazdušne", "brakes": "Disk nazad + E-ABS", "ipRating": "IPX4"},
+      "extraSpecs": [{"label": "Svetla", "value": "LED prednje + stop svetlo"}, {"label": "Aplikacija", "value": "Da (Bluetooth)"}],
+      "colorVariants": [
+        {"name": "Mat crna", "hex": "#1f1f1f", "inStock": true, "sku": "VCX-BLK"},
+        {"name": "Bela", "hex": "#f2f2f2", "inStock": true, "sku": "VCX-WHT"},
+        {"name": "Tamnoplava", "hex": "#1e3a8a", "inStock": false, "sku": "VCX-NVY"}
+      ]
+    },
+    {
+      "id": "scooter-voltra-max-pro",
+      "name": "Voltra Max Pro",
+      "slug": "voltra-max-pro",
+      "brand": "brand-voltra",
+      "category": "cat-gradski",
+      "excerpt": "Veća baterija i dvostruko kočenje za duže relacije – do 60 km sa jednim punjenjem.",
+      "description": "Max Pro je za one koji svakodnevno prelaze veće razdaljine. Duplo amortizovan ram i disk kočnice napred i nazad daju sigurnost pri većim brzinama.",
+      "price": 89990,
+      "priceOnRequest": false,
+      "featured": true,
+      "order": 2,
+      "mainSpecs": {"motorPower": 500, "batteryVoltage": 48, "batteryCapacity": 15, "range": 60, "topSpeed": 25, "weight": 21, "maxLoad": 130, "chargeTime": 7, "tireSize": "10\" tubeless", "brakes": "Disk napred i nazad", "ipRating": "IPX5"},
+      "extraSpecs": [{"label": "Amortizeri", "value": "Napred i nazad"}, {"label": "Tempomat", "value": "Da"}, {"label": "Žmigavci", "value": "Integrisani u volan"}],
+      "colorVariants": [
+        {"name": "Grafit siva", "hex": "#4b5563", "inStock": true, "sku": "VMP-GRY"},
+        {"name": "Crvena", "hex": "#b91c1c", "inStock": true, "sku": "VMP-RED"}
+      ]
+    },
+    {
+      "id": "scooter-urbo-terra-1000",
+      "name": "Urbo Terra 1000",
+      "slug": "urbo-terra-1000",
+      "brand": "brand-urbo",
+      "category": "cat-offroad",
+      "excerpt": "Dvomotorni off-road skuter sa širokim gumama za makadam, šumu i brda.",
+      "description": "Terra 1000 ima dva motora od po 500 W i hidraulične kočnice. Široke off-road gume od 11\" drže podlogu na šljunku i blatu.",
+      "price": null,
+      "priceOnRequest": true,
+      "featured": true,
+      "order": 3,
+      "mainSpecs": {"motorPower": 1000, "batteryVoltage": 52, "batteryCapacity": 23, "range": 75, "topSpeed": 25, "weight": 34, "maxLoad": 150, "chargeTime": 9, "tireSize": "11\" off-road", "brakes": "Hidraulične disk", "ipRating": "IPX5"},
+      "extraSpecs": [{"label": "Pogon", "value": "Dvomotorni (2×500 W)"}, {"label": "Amortizeri", "value": "Hidraulični, podesivi"}],
+      "colorVariants": [
+        {"name": "Maslinasta", "hex": "#4d5b2f", "inStock": true, "sku": "UT1-OLV"},
+        {"name": "Crna", "hex": "#111111", "inStock": true, "sku": "UT1-BLK"},
+        {"name": "Narandžasta", "hex": "#ea580c", "inStock": true, "sku": "UT1-ORG"}
+      ]
+    },
+    {
+      "id": "scooter-urbo-mini",
+      "name": "Urbo Mini",
+      "slug": "urbo-mini",
+      "brand": "brand-urbo",
+      "category": "cat-deciji",
+      "excerpt": "Dečiji električni skuter sa ograničenjem brzine i podesivim volanom (8–14 god).",
+      "description": "Urbo Mini ima tri režima brzine koje roditelj zaključava, i volan koji raste zajedno sa detetom.",
+      "price": 29990,
+      "priceOnRequest": false,
+      "featured": false,
+      "order": 4,
+      "mainSpecs": {"motorPower": 150, "batteryVoltage": 24, "batteryCapacity": 4, "range": 12, "topSpeed": 14, "weight": 8, "maxLoad": 60, "chargeTime": 3, "tireSize": "6.5\" pune", "brakes": "Nožna + elektronska", "ipRating": "IPX4"},
+      "extraSpecs": [{"label": "Uzrast", "value": "8–14 godina"}, {"label": "Roditeljska kontrola", "value": "Zaključavanje brzine"}],
+      "colorVariants": [
+        {"name": "Plava", "hex": "#2563eb", "inStock": true, "sku": "UMI-BLU"},
+        {"name": "Roze", "hex": "#ec4899", "inStock": true, "sku": "UMI-PNK"},
+        {"name": "Zelena", "hex": "#16a34a", "inStock": false, "sku": "UMI-GRN"}
+      ]
+    }
+  ]
+}

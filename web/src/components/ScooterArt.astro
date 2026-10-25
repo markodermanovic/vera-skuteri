@@ -1,0 +1,25 @@
+---
+// Ilustracija skutera u boji varijante – prikazuje se dok varijanta nema fotografije.
+interface Props {
+  color: string;
+  label: string;
+  class?: string;
+}
+const { color, label, class: className } = Astro.props;
+---
+
+<svg viewBox="0 0 400 300" role="img" aria-label={label} class={className}>
+  <rect width="400" height="300" fill="#ececec" />
+  <ellipse cx="200" cy="248" rx="150" ry="10" fill="#0f1115" opacity="0.08" />
+  <!-- volan i stub -->
+  <path d="M286 62 L300 62" stroke="#0f1115" stroke-width="9" stroke-linecap="round" />
+  <path d="M292 66 L310 214" stroke={color} stroke-width="12" stroke-linecap="round" />
+  <!-- deck -->
+  <path d="M96 206 H302 a10 10 0 0 1 0 20 H112 a20 20 0 0 1 -16 -20 z" fill={color} />
+  <path d="M120 206 H290" stroke="#0f1115" stroke-opacity="0.25" stroke-width="3" />
+  <!-- točkovi -->
+  <circle cx="98" cy="226" r="24" fill="#0f1115" /><circle cx="98" cy="226" r="9" fill="#9ca3af" />
+  <circle cx="312" cy="226" r="24" fill="#0f1115" /><circle cx="312" cy="226" r="9" fill="#9ca3af" />
+  <!-- svetlo -->
+  <circle cx="300" cy="96" r="5" fill="#fde68a" />
+</svg>

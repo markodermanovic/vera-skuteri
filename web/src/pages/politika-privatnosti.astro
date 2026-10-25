@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getSettings } from '../lib/content';
+const s = await getSettings();
+---
+
+<Layout title="Politika privatnosti" namespace="privacy">
+  <article class="container-page prose-basic max-w-3xl pt-12">
+    <h1 class="mb-6 text-4xl font-extrabold tracking-tight">Politika privatnosti</h1>
+    <p class="rounded-xl bg-amber-50 p-4 text-sm text-amber-900">
+      Napomena: ovo je šablon. Pre objavljivanja proverite tekst sa pravnikom u skladu sa Zakonom o zaštiti podataka o ličnosti (ZZPL).
+    </p>
+    <h2 class="mb-2 mt-8 text-xl font-bold">Rukovalac podacima</h2>
+    <p>{s.companyName}{s.address && `, ${s.address.replace(/\n/g, ', ')}`}. Kontakt: {s.email}, {s.phone}.</p>
+    <h2 class="mb-2 mt-8 text-xl font-bold">Koje podatke prikupljamo</h2>
+    <p>Kroz kontakt formu prikupljamo ime i prezime, broj telefona, email adresu, model i boju skutera koji vas zanima i sadržaj poruke.</p>
+    <h2 class="mb-2 mt-8 text-xl font-bold">Svrha i pravni osnov</h2>
+    <p>Podatke koristimo isključivo da bismo odgovorili na vaš upit i dostavili ponudu. Pravni osnov je vaš pristanak, koji možete povući u svakom trenutku.</p>
+    <h2 class="mb-2 mt-8 text-xl font-bold">Rok čuvanja</h2>
+    <p>Upite čuvamo najduže 12 meseci od poslednje komunikacije, osim ako zakon ne nalaže drugačije.</p>
+    <h2 class="mb-2 mt-8 text-xl font-bold">Obrađivači</h2>
+    <p>Za slanje emailova koristimo uslugu Resend, a za zaštitu forme od spama Cloudflare Turnstile.</p>
+    <h2 class="mb-2 mt-8 text-xl font-bold">Vaša prava</h2>
+    <p>Imate pravo na pristup, ispravku, brisanje i ograničenje obrade podataka, kao i pravo na pritužbu Povereniku za informacije od javnog značaja i zaštitu podataka o ličnosti. Zahteve pošaljite na {s.email}.</p>
+  </article>
+</Layout>

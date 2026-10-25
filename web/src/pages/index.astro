@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ScooterCard from '../components/ScooterCard.astro';
+import ScooterLine from '../components/ScooterLine.astro';
+import { getCategories, getFeaturedScooters, getSettings } from '../lib/content';
+
+const [featured, categories, settings] = await Promise.all([getFeaturedScooters(), getCategories(), getSettings()]);
+---
+
+<Layout title={settings.companyName} namespace="home">
+  <section class="container-page pt-8 sm:pt-12">
+    <div class="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-brand to-brand-dark px-6 py-16 text-white sm:px-14 sm:py-24">
+      <div class="pointer-events-none absolute -right-32 -top-32 -z-10 size-[28rem] rounded-full bg-white/15 blur-3xl" aria-hidden="true"></div>
+      <ScooterLine class="pointer-events-none absolute -bottom-6 right-0 -z-10 hidden w-[46%] text-white/35 lg:block" />
+
+      <p class="text-sm font-semibold uppercase tracking-[0.25em] text-white/70">Električni skuteri</p>
+      <h1 class="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+        Vozi pametnije.<br />Pronađi svoj skuter.
+      </h1>
+      <p class="mt-6 max-w-xl text-lg text-white/80">
+        Gradski, off-road i dečiji modeli u više boja. Izaberite model, pošaljite upit – mi vas zovemo sa svim detaljima.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href="/skuteri" class="btn-light">Pogledaj sve skutere <span class="arrow" aria-hidden="true">→</span></a>
+        <a href="/kontakt" class="btn border border-white/30 hover:border-white hover:bg-white/10">Pošalji upit</a>
+      </div>
+    </div>
+  </section>
+
+  {categories.length > 0 && (
+    <section class="container-page mt-20" aria-labelledby="kategorije">
+      <h2 id="kategorije" data-reveal class="text-2xl font-extrabold sm:text-3xl">Kategorije</h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-3">
+        {categories.map((c, i) => (
+          <li data-reveal>
+            <a href={`/skuteri?kategorija=${c.slug}`} class="group relative block h-full overflow-hidden rounded-3xl border border-line bg-white p-6 transition-colors duration-500 hover:border-brand">
+              <span class="absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 bg-brand transition-transform duration-500 ease-out-expo group-hover:scale-x-100" aria-hidden="true"></span>
+              <span class="text-xs font-bold text-brand">0{i + 1}</span>
+              <p class="mt-2 flex items-center justify-between text-lg font-bold">
+                {c.name}
+                <span class="text-brand transition-transform duration-500 group-hover:translate-x-1" aria-hidden="true">→</span>
+              </p>
+              {c.description && <p class="mt-1 text-sm text-muted">{c.description}</p>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {featured.length > 0 && (
+    <section class="container-page mt-20" aria-labelledby="izdvojeno">
+      <div class="flex items-end justify-between gap-4" data-reveal>
+        <h2 id="izdvojeno" class="text-2xl font-extrabold sm:text-3xl">Izdvojeni modeli</h2>
+        <a href="/skuteri" class="link-underline text-sm font-semibold text-brand">Svi skuteri →</a>
+      </div>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {featured.map((s) => <ScooterCard scooter={s} />)}
+      </div>
+    </section>
+  )}
+
+  <section class="container-page mt-20">
+    <div data-reveal class="grid gap-6 rounded-[2rem] bg-ink p-8 text-white sm:grid-cols-[1fr_auto] sm:items-center sm:p-12">
+      <div>
+        <h2 class="text-2xl font-extrabold sm:text-3xl">Niste sigurni koji model je za vas?</h2>
+        <p class="mt-2 text-white/70">Pozovite nas na <a class="link-underline font-semibold text-white" href={`tel:${settings.phone.replace(/\s/g, '')}`}>{settings.phone}</a> ili pošaljite upit – pomoći ćemo vam da izaberete.</p>
+      </div>
+      <a href="/kontakt" class="btn-primary">Kontaktirajte nas <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</Layout>
