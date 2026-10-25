@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-import {FolderIcon} from '@sanity/icons'
+import {FolderIcon} from '@sanity/icons/Folder'
 
 export const category = defineType({
   name: 'category',
