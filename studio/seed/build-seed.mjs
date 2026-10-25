@@ -15,7 +15,13 @@ const blocks = (text) =>
   }))
 
 const docs = [
-  {_id: 'siteSettings', _type: 'siteSettings', ...data.settings, social: data.settings.social.map((s, i) => ({_key: key('so', i), ...s}))},
+  {
+    _id: 'siteSettings',
+    _type: 'siteSettings',
+    ...data.settings,
+    otherPhones: (data.settings.otherPhones ?? []).map((o, i) => ({_key: key('p', i), ...o})),
+    social: data.settings.social.map((s, i) => ({_key: key('so', i), ...s})),
+  },
   ...data.brands.map((b) => ({_id: b.id, _type: 'brand', name: b.name, slug: {_type: 'slug', current: b.slug}})),
   ...data.categories.map((c) => ({_id: c.id, _type: 'category', name: c.name, description: c.description, slug: {_type: 'slug', current: c.slug}})),
   ...data.scooters.map((s) => ({

@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScooterCard from '../components/ScooterCard.astro';
-import ScooterLine from '../components/ScooterLine.astro';
+import HeroScooter from '../components/HeroScooter.astro';
 import { getCategories, getFeaturedScooters, getSettings } from '../lib/content';
 
 const [featured, categories, settings] = await Promise.all([getFeaturedScooters(), getCategories(), getSettings()]);
@@ -9,21 +9,24 @@ const [featured, categories, settings] = await Promise.all([getFeaturedScooters(
 
 <Layout title={settings.companyName} namespace="home">
   <section class="container-page pt-8 sm:pt-12">
-    <div class="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-brand to-brand-dark px-6 py-16 text-white sm:px-14 sm:py-24">
+    <div class="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-brand to-brand-dark px-6 py-16 text-white sm:px-14 sm:py-20 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-center lg:gap-8 lg:pr-8">
       <div class="pointer-events-none absolute -right-32 -top-32 -z-10 size-[28rem] rounded-full bg-white/15 blur-3xl" aria-hidden="true"></div>
-      <ScooterLine class="pointer-events-none absolute -bottom-6 right-0 -z-10 hidden w-[46%] text-white/35 lg:block" />
 
-      <p class="text-sm font-semibold uppercase tracking-[0.25em] text-white/70">Električni skuteri</p>
-      <h1 class="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
-        Vozi pametnije.<br />Pronađi svoj skuter.
-      </h1>
-      <p class="mt-6 max-w-xl text-lg text-white/80">
-        Električni skuteri za svakodnevnu vožnju, u više boja. Izaberite model, pošaljite upit – mi vas zovemo sa svim detaljima.
-      </p>
-      <div class="mt-10 flex flex-wrap gap-3">
-        <a href="/skuteri" class="btn-light">Pogledaj sve skutere <span class="arrow" aria-hidden="true">→</span></a>
-        <a href="/kontakt" class="btn border border-white/30 hover:border-white hover:bg-white/10">Pošalji upit</a>
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.25em] text-white/70">Električni skuteri</p>
+        <h1 class="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
+          Vozi pametnije.<br />Pronađi svoj skuter.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-white/80">
+          Električni skuteri za svakodnevnu vožnju, u više boja. Izaberite model, pošaljite upit – mi vas zovemo sa svim detaljima.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href="/skuteri" class="btn-light">Pogledaj sve skutere <span class="arrow" aria-hidden="true">→</span></a>
+          <a href="/kontakt" class="btn border border-white/30 hover:border-white hover:bg-white/10">Pošalji upit</a>
+        </div>
       </div>
+
+      <HeroScooter class="pointer-events-none -mx-2 -mb-8 mt-10 w-[calc(100%+1rem)] text-white sm:mx-auto sm:max-w-xl lg:m-0 lg:w-full lg:max-w-none" />
     </div>
   </section>
 

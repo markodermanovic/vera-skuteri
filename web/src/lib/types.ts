@@ -58,5 +58,6 @@ export interface SiteSettings {
   email: string;
   address?: string;
   workingHours?: string;
+  otherPhones: { label?: string; number: string }[];
   social: { label: string; url: string }[];
 }

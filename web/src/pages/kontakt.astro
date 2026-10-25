@@ -95,12 +95,15 @@ const tel = settings.phone.replace(/\s/g, '');
         <div data-reveal class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand to-brand-dark p-8 text-white">
           <p class="text-sm font-semibold uppercase tracking-widest text-white/70">Radije zovete?</p>
           <a href={`tel:${tel}`} class="link-underline mt-3 inline-block text-2xl font-extrabold">{settings.phone}</a>
-          <a href={`mailto:${settings.email}`} class="link-underline mt-1 block w-fit text-white/80 hover:text-white">{settings.email}</a>
+          {settings.otherPhones.map((p) => (
+            <p class="mt-1 text-white/80">{p.label && `${p.label}: `}<a href={`tel:${p.number.replace(/[^\d+]/g, '')}`} class="link-underline font-semibold text-white">{p.number}</a></p>
+          ))}
+          <a href={`mailto:${settings.email}`} class="link-underline mt-2 block w-fit text-white/80 hover:text-white">{settings.email}</a>
           {settings.workingHours && <p class="mt-4 text-sm text-white/60">{settings.workingHours}</p>}
         </div>
         {settings.address && (
           <div data-reveal class="rounded-[2rem] border border-line bg-white p-8">
-            <p class="font-semibold">Adresa</p>
+            <p class="font-semibold">Prodajna mesta</p>
             <p class="mt-1 whitespace-pre-line text-muted">{settings.address}</p>
           </div>
         )}

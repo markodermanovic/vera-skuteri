@@ -16,16 +16,21 @@
   ],
   "settings": {
     "companyName": "Xtreme Motors",
-    "phone": "+381 60 000 0000",
-    "email": "infoxtrememotori@gmail.com",
-    "address": "Bulevar oslobođenja 1\n21000 Novi Sad",
-    "workingHours": "Pon–Pet 09–18h, Sub 09–14h",
-    "social": [
+    "phone": "+381 64 803 3924",
+    "otherPhones": [
       {
-        "label": "Instagram",
-        "url": "https://instagram.com/"
+        "label": "Maloprodaja",
+        "number": "064/80-33-922"
+      },
+      {
+        "label": "Beograd",
+        "number": "064/8033-929"
       }
-    ]
+    ],
+    "email": "infoxtrememotori@gmail.com",
+    "address": "Beograd – TC Stadion, nivo 1, Zaplanjska 32\nNiš – Vožda Karađorđa 20\nLeskovac – Rade Žunića 83\nVranje – Bore Stankovića 22/4\nVlasotince – Dušanova 2/88",
+    "workingHours": "Pon–Pet 08–20h, Sub 08–16h, Ned zatvoreno",
+    "social": []
   },
   "scooters": [
     {

@@ -1,6 +1,7 @@
 // Uvozi brendove, kategorije i skutere iz web/src/data/sample-scooters.json u Sanity, zajedno sa slikama
 // (polje "photos" u svakoj boji: {url} sa interneta ili {file} iz seed/images/).
-// Postojeći dokumenti sa istim _id se zamenjuju; sa --prune brišu se skuteri, brendovi i kategorije kojih nema u fajlu.
+// Postojeći dokumenti sa istim _id se zamenjuju; sa --prune brišu se skuteri, brendovi i kategorije kojih nema u fajlu,
+// a sa --settings se upisuju i kontakt podaci ("settings").
 //
 // Pokretanje (iz studio/):
 //   SANITY_STUDIO_DATASET=development npx sanity exec seed/import-catalog.mjs --with-user-token
@@ -11,6 +12,7 @@ import {getCliClient} from 'sanity/cli'
 
 const client = getCliClient({apiVersion: '2025-10-01'})
 const prune = process.argv.includes('--prune')
+const withSettings = process.argv.includes('--settings')
 const data = JSON.parse(readFileSync(new URL('../../web/src/data/sample-scooters.json', import.meta.url), 'utf8'))
 const ref = (id) => ({_type: 'reference', _ref: id})
 const blocks = (text) =>
@@ -32,6 +34,19 @@ async function upload(photo) {
 
 console.log(`Dataset: ${client.config().dataset}`)
 const tx = client.transaction()
+
+// Kontakt podaci samo na zahtev – inače bi uvoz pregazio izmene iz Studija
+if (withSettings) {
+  const {social = [], otherPhones = [], ...settings} = data.settings
+  tx.createIfNotExists({_id: 'siteSettings', _type: 'siteSettings'}).patch('siteSettings', (p) =>
+    p.set({
+      ...settings,
+      otherPhones: otherPhones.map((o, i) => ({_key: `p${i}`, ...o})),
+      social: social.map((s, i) => ({_key: `so${i}`, ...s})),
+    }),
+  )
+  console.log('  podešavanja sajta (kontakt)')
+}
 
 for (const b of data.brands) {
   tx.createOrReplace({_id: b.id, _type: 'brand', name: b.name, slug: {_type: 'slug', current: b.slug}})

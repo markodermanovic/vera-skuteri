@@ -33,7 +33,7 @@ SANITY_STUDIO_DATASET=development npx sanity exec seed/import-catalog.mjs --with
 npx sanity exec seed/import-catalog.mjs --with-user-token -- --prune                                    # objava na sajt (production)
 ```
 
-`--prune` briše skutere, brendove i kategorije kojih nema u fajlu. Objava u production pokreće webhook i Cloudflare build (~1 min).
+`--prune` briše skutere, brendove i kategorije kojih nema u fajlu; `--settings` upisuje i kontakt podatke iz `settings` (inače se ne diraju, da se ne pregaze izmene iz Studija). Objava u production pokreće webhook i Cloudflare build (~1 min).
 Bez `RESEND_API_KEY` upiti se u dev modu samo ispisuju u konzolu.
 
 ## Povezivanje Sanity-ja

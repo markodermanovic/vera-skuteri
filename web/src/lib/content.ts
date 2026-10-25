@@ -128,7 +128,7 @@ export async function getBrands(): Promise<Taxonomy[]> {
 
 export async function getSettings(): Promise<SiteSettings> {
   if (!client) return sample.settings;
-  const s = await client.fetch<SiteSettings | null>(`*[_id == "siteSettings"][0]{..., "social": coalesce(social, [])}`);
+  const s = await client.fetch<SiteSettings | null>(`*[_id == "siteSettings"][0]{..., "otherPhones": coalesce(otherPhones, []), "social": coalesce(social, [])}`);
   return s ?? sample.settings;
 }
 

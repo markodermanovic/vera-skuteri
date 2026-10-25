@@ -46,6 +46,11 @@
   [data-reveal].is-pending { opacity: 0; translate: 0 12px; }
 }
 
+/* Hero skuter: dok ga pages/home.ts ne pripremi za iscrtavanje, ne prikazuje se (bez JS-a je odmah ceo) */
+@media (scripting: enabled) {
+  [data-hero-scooter]:not(.is-ready) { visibility: hidden; }
+}
+
 /* Dok Flip animira katalog, CSS tranzicije kartica ne smeju da se mešaju */
 .is-flipping .scooter-card { transition: none !important; }
 

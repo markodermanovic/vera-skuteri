@@ -101,6 +101,9 @@ const isActive = (href: string) => (href === '/' ? Astro.url.pathname === '/' : 
         <div class="text-sm">
           <p class="mb-2 font-semibold text-white">Kontakt</p>
           <p><a class="link-underline hover:text-white" href={`tel:${settings.phone.replace(/\s/g, '')}`}>{settings.phone}</a></p>
+          {settings.otherPhones.map((p) => (
+            <p>{p.label && `${p.label}: `}<a class="link-underline hover:text-white" href={`tel:${p.number.replace(/[^\d+]/g, '')}`}>{p.number}</a></p>
+          ))}
           <p><a class="link-underline hover:text-white" href={`mailto:${settings.email}`}>{settings.email}</a></p>
           {settings.address && <p class="mt-2 whitespace-pre-line">{settings.address}</p>}
           {settings.workingHours && <p class="mt-2">{settings.workingHours}</p>}
