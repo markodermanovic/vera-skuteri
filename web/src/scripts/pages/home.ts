@@ -6,34 +6,33 @@ const LOOP_START = 0.4;
 const LOOP_END = 45.7;
 
 /**
- * Hero video (pages/index.astro): bez zvuka, u petlji, sa dugmetom za pauzu i trakom napretka.
- * Uz reduced-motion ili uštedu podataka ne kreće sam – ostaje poster i dugme "pusti".
+ * Hero video (pages/index.astro): bez zvuka, u petlji, sa trakom napretka.
+ * Uz reduced-motion ili uštedu podataka ne kreće – ostaje poster.
  * Van ekrana se pauzira da ne troši procesor.
  */
 export const initHome: PageInit = ({ container }) => {
   const hero = container.querySelector<HTMLElement>('[data-hero]');
   const video = hero?.querySelector<HTMLVideoElement>('[data-hero-video]');
   if (!hero || !video) return;
-  const toggle = hero.querySelector<HTMLButtonElement>('[data-hero-toggle]')!;
   const progress = hero.querySelector<HTMLElement>('[data-hero-progress]')!;
   const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
 
-  let wanted = !prefersReducedMotion() && !saveData; // da li korisnik želi da video ide
+  const wanted = !prefersReducedMotion() && !saveData;
   let visible = true;
 
-  const render = () => {
-    const playing = !video.paused;
-    toggle.setAttribute('aria-label', playing ? 'Pauziraj video' : 'Pusti video');
-    toggle.querySelector('[data-icon="pause"]')!.classList.toggle('hidden', !playing);
-    toggle.querySelector('[data-icon="play"]')!.classList.toggle('hidden', playing);
+  // Pregledač ponekad odbije automatsko puštanje (npr. tab još nije aktivan) – pokušaj ponovo čim
+  // tab postane vidljiv ili korisnik prvi put klikne / tapne / skroluje; nema dugmeta za ručno puštanje
+  const RETRY_EVENTS = ['visibilitychange', 'pointerdown', 'keydown', 'scroll'] as const;
+  const stopRetry = () => RETRY_EVENTS.forEach((e) => document.removeEventListener(e, retry));
+  const retry = () => {
+    if (document.visibilityState !== 'visible') return;
+    stopRetry();
+    sync();
   };
   const sync = () => {
     if (wanted && visible) {
       video.preload = 'auto';
-      video.play().catch(() => {
-        wanted = false; // autoplay blokiran – ostaje poster sa dugmetom
-        render();
-      });
+      video.play().catch(() => RETRY_EVENTS.forEach((e) => document.addEventListener(e, retry, { passive: true })));
     } else video.pause();
   };
 
@@ -50,18 +49,10 @@ export const initHome: PageInit = ({ container }) => {
     video.currentTime = LOOP_START;
     sync();
   };
-  const onToggle = () => {
-    wanted = video.paused;
-    sync();
-  };
 
   video.addEventListener('loadedmetadata', onMeta);
   video.addEventListener('timeupdate', onTime);
   video.addEventListener('ended', onEnded);
-  video.addEventListener('play', render);
-  video.addEventListener('pause', render);
-  toggle.addEventListener('click', onToggle);
-  toggle.hidden = false;
   progress.style.transition = 'transform 0.25s linear';
 
   const observer = new IntersectionObserver(([entry]) => {
@@ -69,16 +60,13 @@ export const initHome: PageInit = ({ container }) => {
     sync();
   });
   observer.observe(hero);
-  render();
 
   return () => {
     observer.disconnect();
+    stopRetry();
     video.pause();
     video.removeEventListener('loadedmetadata', onMeta);
     video.removeEventListener('timeupdate', onTime);
     video.removeEventListener('ended', onEnded);
-    video.removeEventListener('play', render);
-    video.removeEventListener('pause', render);
-    toggle.removeEventListener('click', onToggle);
   };
 };

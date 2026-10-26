@@ -39,17 +39,7 @@ const [featured, categories, settings] = await Promise.all([getFeaturedScooters(
         </div>
       </div>
 
-      <!-- Kontrola videa i tanka traka napretka -->
-      <button
-        type="button"
-        data-hero-toggle
-        hidden
-        class="absolute bottom-5 right-5 grid size-11 place-items-center rounded-full border border-white/40 bg-black/20 backdrop-blur-sm transition hover:bg-white/15 sm:bottom-6 sm:right-6"
-        aria-label="Pauziraj video"
-      >
-        <svg data-icon="pause" viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /></svg>
-        <svg data-icon="play" viewBox="0 0 24 24" class="hidden size-4" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
-      </button>
+      <!-- Tanka traka napretka videa -->
       <div class="absolute inset-x-0 bottom-0 h-[3px] bg-white/10" aria-hidden="true">
         <div data-hero-progress class="h-full w-full origin-left scale-x-0 bg-white/70"></div>
       </div>
