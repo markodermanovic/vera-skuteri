@@ -8,7 +8,8 @@ const [featured, categories, settings] = await Promise.all([getFeaturedScooters(
 
 <Layout title={settings.companyName} namespace="home">
   <section class="container-page pt-8 sm:pt-12">
-    <div data-hero class="relative isolate flex min-h-[34rem] items-end overflow-hidden rounded-[2rem] bg-brand-dark px-6 pb-14 pt-24 text-white sm:min-h-[38rem] sm:px-14 sm:pb-16 lg:min-h-[42rem] lg:items-center lg:pb-24">
+    <!-- clip-path pored overflow-hidden: video kao zaseban sloj (GPU) inače posle nekog vremena izađe iz zaobljenih ivica -->
+    <div data-hero class="relative isolate flex min-h-[34rem] items-end overflow-hidden rounded-[2rem] [clip-path:inset(0_round_2rem)] bg-brand-dark px-6 pb-14 pt-24 text-white sm:min-h-[38rem] sm:px-14 sm:pb-16 lg:min-h-[42rem] lg:items-center lg:pb-24">
       <!-- Pozadinski video (bez zvuka); pages/home.ts ga pušta, bez JS-a ili uz reduced-motion ostaje poster -->
       <video
         data-hero-video
