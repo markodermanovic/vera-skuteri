@@ -31,7 +31,6 @@ export const initHome: PageInit = ({ container }) => {
   };
   const sync = () => {
     if (wanted && visible) {
-      video.preload = 'auto';
       video.play().catch(() => RETRY_EVENTS.forEach((e) => document.addEventListener(e, retry, { passive: true })));
     } else video.pause();
   };
