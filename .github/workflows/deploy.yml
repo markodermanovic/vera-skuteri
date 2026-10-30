@@ -5,7 +5,7 @@
 #
 # GitHub → Settings → Secrets and variables → Actions:
 #   Secrets:   DEPLOY_HOST, DEPLOY_USER, DEPLOY_PASSWORD, DEPLOY_DIR (npr. public_html; "/" za FTP nalog zaključan na folder)
-#   Variables: DEPLOY_PROTOCOL (sftp ili ftps), DEPLOY_PORT (22 za sftp, 21 za ftps),
+#   Variables: DEPLOY_PROTOCOL (sftp, ili ftp = FTP sa TLS-om na portu 21), DEPLOY_PORT (22 ili 21), DEPLOY_TLS (false samo privremeno),
 #              SANITY_PROJECT_ID, SANITY_DATASET, SITE_URL, PUBLIC_TURNSTILE_SITE_KEY,
 #              NOINDEX (true = test sajt, Google ne indeksira)
 # Ključevi za mejl (Resend) i Turnstile secret NISU ovde – samo u xtreme-config.php na serveru.
@@ -69,14 +69,22 @@ jobs:
           DIR: ${{ secrets.DEPLOY_DIR }}
           PROTOCOL: ${{ vars.DEPLOY_PROTOCOL || 'sftp' }}
           PORT: ${{ vars.DEPLOY_PORT || '22' }}
+          # Privremeno: DEPLOY_TLS=false dok hosting ne omogući FTP preko TLS-a (lozinka tada ide nešifrovano!)
+          TLS: ${{ vars.DEPLOY_TLS || 'true' }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          if [ "$TLS" = "false" ]; then
+            echo "::warning::DEPLOY_TLS=false – FTP bez šifrovanja. Vratiti na true čim hosting omogući TLS i promeniti FTP lozinku."
+            SSL="set ftp:ssl-allow false;"
+          else
+            SSL="set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate yes;"
+          fi
           # Lozinka ide kroz LFTP_PASSWORD (--env-password) – nikad u komandnu liniju ni u log.
           # --delete uklanja stare fajlove sajta; fajlovi hostinga (SSL, cgi-bin, PHP podešavanja, logovi) se ne diraju.
           lftp --env-password -u "$USER" -p "$PORT" "$PROTOCOL://$HOST" -e "
             set net:max-retries 3; set net:timeout 30;
             set sftp:auto-confirm yes;
-            set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate yes;
+            $SSL
             mirror --reverse --delete --parallel=4 \
               --exclude-glob .well-known/ --exclude-glob cgi-bin/ \
               --exclude-glob php.ini --exclude-glob .user.ini \
