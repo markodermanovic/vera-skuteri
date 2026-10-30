@@ -18,6 +18,20 @@ ErrorDocument 404 /404.html
 
   # Forma šalje na /api/upit – obrađuje je PHP
   RewriteRule ^api/upit/?$ api/upit.php [L]
+
+  # Adrese su bez "/" na kraju (trailingSlash: 'never'): /skuteri/ → /skuteri,
+  # a /skuteri se služi direktno iz skuteri/index.html, bez Apache-ovog preusmerenja na /skuteri/
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^(.+)/$ https://%{HTTP_HOST}/$1 [L,R=301]
+
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.+)$ $1/index.html [L]
+</IfModule>
+
+# Ne dodavati "/" na foldere – to radi pravilo iznad (bez liste fajlova: Options -Indexes)
+<IfModule mod_dir.c>
+  DirectorySlash Off
 </IfModule>
 
 # Fajlovi u _astro/ imaju heš u imenu – bezbedno ih je keširati godinu dana; HTML uvek proveriti
