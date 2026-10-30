@@ -1,0 +1,86 @@
+# Build sajta i otpremanje na shared hosting (SFTP ili FTPS).
+# Pokreće se: push na shared-hosting, objava u Sanity-ju ili ručno (Actions → Run workflow).
+# Sanity webhook: POST https://api.github.com/repos/markodermanovic/vera-skuteri/actions/workflows/deploy.yml/dispatches
+# sa projekcijom {"ref": "shared-hosting"} (token: Actions read/write). Nezavisno od Cloudflare build-a sa main-a.
+#
+# GitHub → Settings → Secrets and variables → Actions:
+#   Secrets:   DEPLOY_HOST, DEPLOY_USER, DEPLOY_PASSWORD, DEPLOY_DIR (npr. public_html; "/" za FTP nalog zaključan na folder)
+#   Variables: DEPLOY_PROTOCOL (sftp ili ftps), DEPLOY_PORT (22 za sftp, 21 za ftps),
+#              SANITY_PROJECT_ID, SANITY_DATASET, SITE_URL, PUBLIC_TURNSTILE_SITE_KEY,
+#              NOINDEX (true = test sajt, Google ne indeksira)
+# Ključevi za mejl (Resend) i Turnstile secret NISU ovde – samo u xtreme-config.php na serveru.
+
+name: Deploy na hosting
+
+on:
+  push:
+    branches: [shared-hosting]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Jedna objava u Sanity-ju šalje više signala – važi samo poslednji build
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: shared-hosting
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          SANITY_PROJECT_ID: ${{ vars.SANITY_PROJECT_ID }}
+          SANITY_DATASET: ${{ vars.SANITY_DATASET }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+
+      - name: Provera build-a
+        run: |
+          test -f web/dist/index.html
+          test -f web/dist/api/upit.php
+          test -f web/dist/api/site-data.json
+          test -f web/dist/.htaccess
+
+      - name: Noindex (samo test sajt)
+        if: vars.NOINDEX == 'true'
+        run: |
+          printf '\n# Test sajt – Google da ne indeksira (dodaje deploy.yml kad je NOINDEX=true)\n<IfModule mod_headers.c>\n  Header always set X-Robots-Tag "noindex, nofollow"\n</IfModule>\n' >> web/dist/.htaccess
+
+      - name: Otpremanje (lftp mirror)
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          LFTP_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+          DIR: ${{ secrets.DEPLOY_DIR }}
+          PROTOCOL: ${{ vars.DEPLOY_PROTOCOL || 'sftp' }}
+          PORT: ${{ vars.DEPLOY_PORT || '22' }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          # Lozinka ide kroz LFTP_PASSWORD (--env-password) – nikad u komandnu liniju ni u log.
+          # --delete uklanja stare fajlove sajta; fajlovi hostinga (SSL, cgi-bin, PHP podešavanja, logovi) se ne diraju.
+          lftp --env-password -u "$USER" -p "$PORT" "$PROTOCOL://$HOST" -e "
+            set net:max-retries 3; set net:timeout 30;
+            set sftp:auto-confirm yes;
+            set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate yes;
+            mirror --reverse --delete --parallel=4 \
+              --exclude-glob .well-known/ --exclude-glob cgi-bin/ \
+              --exclude-glob php.ini --exclude-glob .user.ini \
+              --exclude-glob error_log --exclude-glob '*/error_log' \
+              web/dist/ '$DIR';
+            quit
+          "
