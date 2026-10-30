@@ -6,7 +6,7 @@
     "node": ">=22.23.4"
   },
   "scripts": {
-    "dev": "CLOUDFLARE_INCLUDE_PROCESS_ENV=true SANITY_DATASET=development astro dev",
+    "dev": "SANITY_DATASET=development astro dev",
     "dev:live": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

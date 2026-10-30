@@ -10,3 +10,6 @@ studio/.sanity
 
 # lokalna podešavanja editora / Claude preview
 .claude
+
+# Tajne za formu na hostingu – samo primer ide u git
+xtreme-config.php

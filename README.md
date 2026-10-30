@@ -6,9 +6,9 @@ Katalog električnih skutera sa formom za upit (bez online plaćanja).
 |---|---|
 | Sajt | Astro 7 (statičke stranice) + Tailwind 4 |
 | CMS | Sanity Studio (`studio/`) |
-| Hosting | Cloudflare Workers (statički fajlovi + jedan endpoint `/api/upit`) |
+| Hosting | Shared hosting (Apache + PHP): statičke stranice + `api/upit.php` za formu |
 | Email | Resend |
-| Zaštita od spama | Cloudflare Turnstile + honeypot + Zod validacija |
+| Zaštita od spama | Cloudflare Turnstile + honeypot + provera polja u PHP-u |
 
 ## Lokalni razvoj
 
@@ -33,8 +33,9 @@ SANITY_STUDIO_DATASET=development npx sanity exec seed/import-catalog.mjs --with
 npx sanity exec seed/import-catalog.mjs --with-user-token -- --prune                                    # objava na sajt (production)
 ```
 
-`--prune` briše skutere, brendove i kategorije kojih nema u fajlu; `--settings` upisuje i kontakt podatke iz `settings` (inače se ne diraju, da se ne pregaze izmene iz Studija). Objava u production pokreće webhook i Cloudflare build (~1 min).
-Bez `RESEND_API_KEY` upiti se u dev modu samo ispisuju u konzolu.
+`--prune` briše skutere, brendove i kategorije kojih nema u fajlu; `--settings` upisuje i kontakt podatke iz `settings` (inače se ne diraju, da se ne pregaze izmene iz Studija). Objava u production pokreće webhook i novi build (~1–2 min).
+
+Forma se obrađuje u PHP-u (`web/public/api/upit.php`), pa u `npm run dev` slanje ne radi – testira se na hostingu (ili lokalnim PHP serverom nad `web/dist`).
 
 ## Povezivanje Sanity-ja
 
@@ -69,36 +70,51 @@ Pravila:
 - **Skuter**: naziv, brend, kategorija, cena ili „cena na upit“, glavne specifikacije (fiksna polja), dodatne specifikacije (slobodni parovi naziv/vrednost), varijante boja (naziv, HEX, slike, na stanju, SKU), SEO.
 - **Brend**, **Kategorija**, **Podešavanja sajta** (telefon, email, adresa, radno vreme, mreže).
 
-## Deploy (Cloudflare)
+## Kako sajt radi
+
+1. Sadržaj (modeli, cene, slike, kontakt) se uređuje u Sanity Studiju i čuva u Sanity-ju (projekat `g8e3xhkc`, dataset `production`).
+2. `npm run build` pokreće Astro: `web/src/lib/content.ts` tada čita Sanity i od svake stranice pravi gotov HTML u `web/dist`.
+   Slike ostaju na `cdn.sanity.io` (u HTML-u su samo linkovi). Posle build-a sajt više ne zavisi od Sanity API-ja.
+3. `web/dist` se otpremi na hosting. Jedini serverski deo je forma: `/api/upit` → `api/upit.php` (Resend + Turnstile),
+   koja čita nazive modela iz `api/site-data.json` (pravi se u istom build-u).
+4. Zato svaka objava u Studiju traži novi build + otpremanje – ručno ili automatski (GitHub Actions).
+
+## Deploy na shared hosting (cPanel, PHP 8.1+)
+
+**Jednom na hostingu:**
+
+1. Domen/poddomen + SSL (cPanel → SSL/TLS Status → AutoSSL).
+2. `hosting/xtreme-config.example.php` kopiraj kao **`xtreme-config.php` u home folder naloga – pored `public_html`, ne unutar njega** – i upiši ključeve (Resend, primalac, Turnstile secret).
+3. Za automatski deploy: poseban FTP nalog ograničen na `public_html` (cPanel → FTP Accounts), preko SFTP-a ako hosting daje SSH, inače FTPS.
+
+**Ručno (A):**
 
 ```bash
-cd web
-npx wrangler login
-npx wrangler secret put RESEND_API_KEY
-npx wrangler secret put TURNSTILE_SECRET_KEY
-npx wrangler secret put INQUIRY_TO_EMAIL
-npm run build && npx wrangler deploy
+SITE_URL=https://xtreme.rs npm run build      # pravi web/dist sa podacima iz Sanity-ja (production)
 ```
 
-Javne promenljive (`SANITY_PROJECT_ID`, `PUBLIC_TURNSTILE_SITE_KEY`, `INQUIRY_FROM_EMAIL`) moraju biti dostupne pri build-u
-(Cloudflare → Workers Builds → Build variables), a tajne kao Worker secrets.
+Zatim sadržaj `web/dist` (uključujući skriveni `.htaccess`) otpremi u `public_html` (FileZilla, „Overwrite“).
 
-Preporučeno: povezati GitHub repo u Cloudflare Workers Builds (automatski deploy na push na `main`, preview za PR).
+**Automatski (B) – `.github/workflows/deploy.yml`:** push na `main`, objava u Sanity-ju ili dugme „Run workflow“ → build → `lftp mirror` na hosting.
 
-### Automatski rebuild posle objave u CMS-u
+1. GitHub → repo → Settings → Secrets and variables → Actions
+   - **Secrets:** `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PASSWORD`, `DEPLOY_DIR` (npr. `public_html`)
+   - **Variables:** `DEPLOY_PROTOCOL` (`sftp`/`ftps`), `DEPLOY_PORT` (`22`/`21`), `SANITY_PROJECT_ID` (`g8e3xhkc`), `SANITY_DATASET` (`production`), `SITE_URL`, `PUBLIC_TURNSTILE_SITE_KEY`
+2. GitHub → Settings (profil) → Developer settings → **Fine-grained token**: samo ovaj repo, dozvola **Contents: Read and write** (potrebna za `repository_dispatch`), rok važenja godinu dana.
+3. sanity.io/manage → API → Webhooks → webhook (isti filter `_type in ["scooter","brand","category","siteSettings"]`):
+   - URL: `https://api.github.com/repos/markodermanovic/vera-skuteri/dispatches`, metoda POST
+   - HTTP headers: `Authorization: Bearer <token>`, `Accept: application/vnd.github+json`
+   - Projection: `{"event_type": "sanity-publish"}`
 
-1. Cloudflare → Worker → Settings → Builds → **Deploy hook** → kopiraj URL.
-2. sanity.io/manage → API → **Webhooks** → novi webhook na taj URL, filter `_type in ["scooter","brand","category","siteSettings"]`, okidači create/update/delete.
-
-Urednik objavi izmenu → sajt je ažuriran za ~1 minut.
+Ključevi za mejl nikad ne idu na GitHub – samo u `xtreme-config.php` na serveru.
 
 ### Resend
 
-Verifikuj domen (SPF/DKIM DNS zapisi) da bi `INQUIRY_FROM_EMAIL` sa tvog domena stizao u inbox, a ne u spam.
+Verifikuj domen (SPF/DKIM DNS zapisi kod hostinga) i u `xtreme-config.php` promeni `INQUIRY_FROM_EMAIL` na adresu sa tog domena – tek tada kupci dobijaju potvrdu na svoj mejl.
 
 ## Pre puštanja u rad
 
 - [ ] Pravi Turnstile ključevi (Cloudflare → Turnstile) umesto test ključeva
-- [ ] Domen u `web/astro.config.mjs` (`site`) i u Cloudflare-u
+- [ ] Domen u `SITE_URL` (build) i SSL na hostingu
 - [ ] Pravnik da pregleda `/politika-privatnosti`
 - [ ] Prave fotografije i podaci u Sanity-ju
